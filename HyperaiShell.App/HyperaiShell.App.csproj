@@ -34,13 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\HyperaiShell.Foundation\HyperaiShell.Foundation\HyperaiShell.Foundation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HyperaiShell.Foundation\HyperaiShell.Foundation.csproj" />
   </ItemGroup>
 
 </Project>
