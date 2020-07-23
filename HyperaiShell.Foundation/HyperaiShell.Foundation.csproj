@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageId>HyperaiShell.Foundation</PackageId>
-    <Version>2020.7.20</Version>
-    <AssemblyVersion>2020.7.20</AssemblyVersion>
+    <Version>2020.7.23</Version>
+    <AssemblyVersion>2020.7.23</AssemblyVersion>
     <Authors>GravityLab</Authors>
     <Company>Unicore</Company>
     <PackageDescription>Basics for HyperShell plugins</PackageDescription>
