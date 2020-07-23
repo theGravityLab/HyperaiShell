@@ -54,10 +54,10 @@ namespace HyperaiShell.App
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            if(e.IsTerminating)
+            if (e.IsTerminating)
             {
-                CurrentDomain_ProcessExit(sender, e);
                 logger.LogCritical((Exception)e.ExceptionObject, "Terminating for exception uncaught.");
+                Environment.ExitCode = -1;
             }
         }
 

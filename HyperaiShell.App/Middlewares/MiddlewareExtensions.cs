@@ -19,5 +19,11 @@ namespace HyperaiShell.App.Middlewares
             app.Use<LoggingMiddleware>();
             return app;
         }
+
+        public static IHyperaiApplicationBuilder UseBlacklist(this IHyperaiApplicationBuilder app)
+        {
+            app.Use<BlockMiddleware>();
+            return app;
+        }
     }
 }
