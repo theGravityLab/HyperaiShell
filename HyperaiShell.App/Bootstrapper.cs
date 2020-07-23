@@ -3,6 +3,7 @@ using Hyperai.Messages;
 using Hyperai.Serialization;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
+using HyperaiShell.App.Logging;
 using HyperaiShell.App.Middlewares;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.App.Services;
@@ -39,8 +40,9 @@ namespace HyperaiShell.App
             services.AddLogging(options => options
                 .AddConfiguration(config)
                 .AddDebug()
-                .AddConsole()
-                .AddFile("logs/app_{Date}.log", minimumLevel: LogLevel.Debug)
+                .AddReConsole()
+                .AddFile("logs/app_{Date}.log", minimumLevel: LogLevel.Information)
+                .SetMinimumLevel(LogLevel.Trace)
                 );
 
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
