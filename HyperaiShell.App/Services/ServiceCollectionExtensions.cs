@@ -46,5 +46,11 @@ namespace HyperaiShell.App.Services
             services.AddSingleton<IAttachmentService, AttachmentService>();
             return services;
         }
+
+        public static IServiceCollection AddBlacklist(this IServiceCollection services)
+        {
+            services.AddSingleton<IBlockService, BlockService>();
+            return services;
+        }
     }
 }

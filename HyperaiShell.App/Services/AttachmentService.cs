@@ -2,16 +2,20 @@
 using HyperaiShell.App.Models;
 using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 
 namespace HyperaiShell.App.Services
 {
     public class AttachmentService : IAttachmentService
     {
         private readonly IRepository _repository;
-        public AttachmentService(IRepository repository)
+        private readonly ILogger _logger;
+        public AttachmentService(IRepository repository, ILogger<AttachmentService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
         public void Attach<T>(T ins, RelationModel toWhom)
         {
@@ -44,8 +48,12 @@ namespace HyperaiShell.App.Services
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             string typeName = typeof(T).FullName;
             T ins = (T)_repository.Query<Attachment>().Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
+            watch.Stop();
+            _logger.LogDebug("Data query and deserilization took {} milliseconds for {}@{}", watch.ElapsedMilliseconds, typeof(T).Name, fromWhom.Identity);
             return ins;
         }
 

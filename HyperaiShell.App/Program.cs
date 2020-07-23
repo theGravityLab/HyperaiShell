@@ -8,6 +8,7 @@ using HyperaiShell.Foundation.Services;
 using LiteDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,9 +18,11 @@ namespace HyperaiShell.App
 {
     public static class Program
     {
+        static ILogger logger;
         private static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             BsonMapper.Global = new BsonMapper(null, new ToStringTypeNameBinder());
 
@@ -45,8 +48,17 @@ namespace HyperaiShell.App
             NothingToSay(app);
             Shared.Application = app.Build();
             MakeItWork(Shared.Application);
+            logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
             Shared.Application.Run();
-            // TODO: uncomment it to run the application
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if(e.IsTerminating)
+            {
+                CurrentDomain_ProcessExit(sender, e);
+                logger.LogCritical((Exception)e.ExceptionObject, "Terminating for exception uncaught.");
+            }
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
