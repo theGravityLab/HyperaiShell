@@ -24,15 +24,23 @@ namespace HyperaiShell.App.Middlewares
                 case FriendMessageEventArgs friendMessage:
                     {
                         string reason = null;
-                        var banned = _service.IsBanned(friendMessage.User.Identity, out reason);
-                        if (banned) _logger.LogInformation("Message rejected ({}) for {}", friendMessage.Message.ToString(), reason);
+                        bool banned = _service.IsBanned(friendMessage.User.Identity, out reason);
+                        if (banned)
+                        {
+                            _logger.LogInformation("Message rejected ({}) for {}", friendMessage.Message.ToString(), reason);
+                        }
+
                         return !banned;
                     }
                 case GroupMessageEventArgs groupMessage:
                     {
                         string reason = null;
-                        var banned = _service.IsBanned(groupMessage.User.Identity, out reason);
-                        if (banned) _logger.LogInformation("Message rejected: ({}) for {}", groupMessage.Message.ToString(), reason);
+                        bool banned = _service.IsBanned(groupMessage.User.Identity, out reason);
+                        if (banned)
+                        {
+                            _logger.LogInformation("Message rejected: ({}) for {}", groupMessage.Message.ToString(), reason);
+                        }
+
                         return !banned;
                     }
                 default:

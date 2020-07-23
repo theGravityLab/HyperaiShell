@@ -48,7 +48,7 @@ namespace HyperaiShell.App.Services
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
-            var watch = new Stopwatch();
+            Stopwatch watch = new Stopwatch();
             watch.Start();
             string typeName = typeof(T).FullName;
             T ins = (T)_repository.Query<Attachment>().Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;

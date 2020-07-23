@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,13 +19,13 @@ namespace HyperaiShell.App
 {
     public static class Program
     {
-        static ILogger logger;
+        private static ILogger logger;
         private static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Console.CancelKeyPress += Console_CancelKeyPress;
 
-            BsonMapper.Global = new BsonMapper(null, new ToStringTypeNameBinder());
+            BsonMapper.Global = new BsonMapper(null, new AssemblyNameTypeNameBinder());
 
             System.Collections.Generic.IEnumerable<string> dirs = new string[]
             {
@@ -47,9 +48,16 @@ namespace HyperaiShell.App
             FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing(app).Wait();
             NothingToSay(app);
             Shared.Application = app.Build();
-            MakeItWork(Shared.Application);
             logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
+            MakeItWork(Shared.Application);
             Shared.Application.Run();
+        }
+
+        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            logger.LogInformation("Shutting down...");
+            Shared.Application.StopAsync().Wait();
+            Environment.Exit(0);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -59,11 +67,6 @@ namespace HyperaiShell.App
                 logger.LogCritical((Exception)e.ExceptionObject, "Terminating for exception uncaught.");
                 Environment.ExitCode = -1;
             }
-        }
-
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
-        {
-            Shared.Application.StopAsync().Wait();
         }
 
         /// <summary>
@@ -78,7 +81,7 @@ namespace HyperaiShell.App
             // search for nupkg files and load then
             foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
             {
-                await PluginManager.Instance.LoadAsync(file);
+                await PluginManager.Instance.LoadPackageAsync(file);
             }
         }
 
@@ -87,10 +90,10 @@ namespace HyperaiShell.App
         /// </summary>
         private static void NothingToSay(IHyperaiApplicationBuilder app)
         {
-            System.Collections.Generic.IEnumerable<Type> plugins = PluginManager.Instance.GetManagedPlugins();
+            IEnumerable<Type> plugins = PluginManager.Instance.GetManagedPlugins();
             foreach (Type type in plugins)
             {
-                PluginBase plugin = (PluginBase)Activator.CreateInstance(type);
+                PluginBase plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureServices(app.Services);
             }
         }
@@ -104,8 +107,9 @@ namespace HyperaiShell.App
             IBotService service = app.Provider.GetRequiredService<IBotService>();
             foreach (Type type in PluginManager.Instance.GetManagedPlugins())
             {
-                PluginBase plugin = (PluginBase)Activator.CreateInstance(type);
+                PluginBase plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder);
+                logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
             }
         }
 

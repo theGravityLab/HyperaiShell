@@ -1,5 +1,5 @@
-using System;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace HyperaiShell.App.Logging
 {
@@ -26,7 +26,7 @@ namespace HyperaiShell.App.Logging
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            var levelName = logLevel switch
+            string levelName = logLevel switch
             {
                 LogLevel.Trace => "TRAC",
                 LogLevel.Debug => "DEBG",
@@ -38,11 +38,11 @@ namespace HyperaiShell.App.Logging
             };
             // [20/07/22 00:11][DEBG]NAME =>
             // STHSTH
-            var datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
+            string datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write(datetime);
-            var color = GetColor(logLevel);
+            (ConsoleColor, ConsoleColor) color = GetColor(logLevel);
             Console.BackgroundColor = color.Item1;
             Console.ForegroundColor = color.Item2;
             Console.Write($"[{levelName}]");

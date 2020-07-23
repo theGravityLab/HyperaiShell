@@ -1,7 +1,7 @@
-using System;
 using HyperaiShell.App.Models;
 using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
+using System;
 
 namespace HyperaiShell.App.Services
 {
@@ -21,24 +21,25 @@ namespace HyperaiShell.App.Services
 
         public void Deban(long id)
         {
-            var user = _repository.Query<BlockedUser>().Where(x => x.UserId == id).FirstOrDefault();
+            BlockedUser user = _repository.Query<BlockedUser>().Where(x => x.UserId == id).FirstOrDefault();
             if (user != null)
-            { 
+            {
                 user.IsBanned = false;
-                _repository.Update<BlockedUser>(user); 
+                _repository.Update<BlockedUser>(user);
             }
         }
 
         public bool IsBanned(long id, out string reason)
         {
-            var user = _repository.Query<BlockedUser>().Where(x => x.UserId == id).FirstOrDefault();
+            BlockedUser user = _repository.Query<BlockedUser>().Where(x => x.UserId == id).FirstOrDefault();
             if (user == null)
             {
                 reason = null;
                 return false;
-            }else
+            }
+            else
             {
-                reason = user.IsBanned ? user.Reason: null;
+                reason = user.IsBanned ? user.Reason : null;
                 return user.IsBanned;
             }
         }
