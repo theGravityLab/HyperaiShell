@@ -60,9 +60,10 @@ namespace HyperaiShell.App.Plugins
             NuspecReader nuspecReader = await reader.GetNuspecReaderAsync(CancellationToken.None);
             string identity = nuspecReader.GetId();
             IEnumerable<FrameworkSpecificGroup> groups = await reader.GetLibItemsAsync(CancellationToken.None);
-            FrameworkSpecificGroup group = groups.FirstOrDefault();
+            FrameworkSpecificGroup group = groups.Where(x=>x.TargetFramework.GetShortFolderName().StartsWith("netstandard")).OrderByDescending(x=>x.TargetFramework.GetShortFolderName()).FirstOrDefault();
             foreach (string packageFile in group.Items)
             {
+                if (!packageFile.EndsWith(".dll")) continue;
                 string tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 string path = reader.ExtractFile(packageFile, tmpPath, NullLogger.Instance);
                 //Type type = Load(await File.ReadAllBytesAsync(path));
