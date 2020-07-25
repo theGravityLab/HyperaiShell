@@ -7,10 +7,12 @@ namespace HyperaiShell.Foundation.ModelExtensions
     public static class BlacklsitExtensions
     {
         private static readonly IBlockService service;
+
         static BlacklsitExtensions()
         {
             service = Shared.Application.Provider.GetRequiredService<IBlockService>();
         }
+
         public static bool IsBanned(this User user)
         {
             return service.IsBanned(user.Identity, out _);

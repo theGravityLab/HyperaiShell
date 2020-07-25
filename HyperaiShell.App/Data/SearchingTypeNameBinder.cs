@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HyperaiShell.App.Data
 {
-    public class ToStringTypeNameBinder : ITypeNameBinder
+    public class SearchingTypeNameBinder : ITypeNameBinder
     {
         public string GetName(Type type)
         {

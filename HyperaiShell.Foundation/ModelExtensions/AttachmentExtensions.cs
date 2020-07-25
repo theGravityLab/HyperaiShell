@@ -8,10 +8,12 @@ namespace HyperaiShell.Foundation.ModelExtensions
     public static class AttachmentExtensions
     {
         private static readonly IAttachmentService service;
+
         static AttachmentExtensions()
         {
             service = Shared.Application.Provider.GetRequiredService<IAttachmentService>();
         }
+
         public static void Attach<T>(this RelationModel model, T ins)
         {
             service.Attach<T>(ins, model);

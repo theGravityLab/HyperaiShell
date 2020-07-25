@@ -12,10 +12,10 @@ namespace HyperaiShell.App.Services
     public class AuthorizationService : IAuthorizationService
     {
         private readonly string _daddy;
+
         public AuthorizationService(IConfiguration configuration)
         {
             _daddy = configuration["Application:Daddy"];
-
         }
 
         public bool CheckTicket(RelationModel model, string specificName)

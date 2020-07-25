@@ -11,6 +11,5 @@ namespace HyperaiShell.App.Plugins
 
         public IConfiguration Value =>
             PluginManager.Instance.GetContextOfPlugin(typeof(TPlugin)).Configuration.Value;
-
     }
 }

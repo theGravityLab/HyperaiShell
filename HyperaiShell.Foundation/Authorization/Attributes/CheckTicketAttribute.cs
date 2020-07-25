@@ -9,9 +9,16 @@ namespace HyperaiShell.Foundation.Authorization.Attributes
     public class CheckTicketAttribute : FilterByAttribute
     {
         private const string message = "Permission Denied: ";
-        public CheckTicketAttribute(string specificName) : base(new CheckTicketFilter(new string[] { specificName }), message + specificName) { }
-        public CheckTicketAttribute(params string[] specificNames) : base(new CheckTicketFilter(specificNames), message + string.Join(',', specificNames)) { }
+
+        public CheckTicketAttribute(string specificName) : base(new CheckTicketFilter(new string[] { specificName }), message + specificName)
+        {
+        }
+
+        public CheckTicketAttribute(params string[] specificNames) : base(new CheckTicketFilter(specificNames), message + string.Join(',', specificNames))
+        {
+        }
     }
+
     internal class CheckTicketFilter : IFilter
     {
         private readonly IEnumerable<string> names;
@@ -26,5 +33,4 @@ namespace HyperaiShell.Foundation.Authorization.Attributes
             return names.Any(x => context.User.CheckPermission(x));
         }
     }
-
 }

@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <StartupObject>HyperaiShell.App.Program</StartupObject>
-    <AssemblyVersion>2020.7.23</AssemblyVersion>
+    <AssemblyVersion>2020.7.24</AssemblyVersion>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/theGravityLab/HyperaiShell.App</RepositoryUrl>
     <Authors>GravityLab</Authors>
@@ -16,10 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hyperai.Abstractions" Version="2020.7.23" />
-    <PackageReference Include="Hyperai.Core" Version="2020.7.23" />
-    <PackageReference Include="Hyperai.Units" Version="2020.7.23" />
-    <PackageReference Include="Hyperai.Units.Abstractions" Version="2020.7.23" />
+    <PackageReference Include="Hyperai.Core" Version="2020.7.24.1" />
+    <PackageReference Include="Hyperai.Units" Version="2020.7.24" />
     <PackageReference Include="LiteDB" Version="5.0.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.6" />
@@ -31,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NuGet.Packaging" Version="5.6.0" />
+    <PackageReference Include="NuGet.Packaging" Version="5.7.0-rtm.6702" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
   </ItemGroup>
 
@@ -44,5 +42,4 @@
   <ItemGroup>
     <ProjectReference Include="..\HyperaiShell.Foundation\HyperaiShell.Foundation.csproj" />
   </ItemGroup>
-
 </Project>

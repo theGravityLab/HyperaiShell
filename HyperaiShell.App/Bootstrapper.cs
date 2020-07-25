@@ -21,6 +21,7 @@ namespace HyperaiShell.App
         public void ConfigureMiddlewares(IHyperaiApplicationBuilder app)
         {
             app.UseLogging();
+            app.UseBlacklist();
             app.UseTranslator();
             app.UseBots();
             app.UseUnits();
@@ -55,6 +56,7 @@ namespace HyperaiShell.App
             services.AddUnits();
             services.AddAttachments();
             services.AddAuthorization();
+            services.AddBlacklist();
         }
     }
 }

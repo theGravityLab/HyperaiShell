@@ -10,10 +10,12 @@ namespace HyperaiShell.Foundation.ModelExtensions
     public static class AuthorizationExtensions
     {
         private static readonly IAuthorizationService service;
+
         static AuthorizationExtensions()
         {
             service = Shared.Application.Provider.GetRequiredService<IAuthorizationService>();
         }
+
         public static void GrantLimited(this RelationModel model, string name, int count)
         {
             service.PutLimited(model, name, count);

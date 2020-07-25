@@ -13,6 +13,7 @@ namespace HyperaiShell.App.Middlewares
         {
             _service = service;
         }
+
         public bool Run(IApiClient sender, GenericEventArgs args)
         {
             _service.PushAsync(args);

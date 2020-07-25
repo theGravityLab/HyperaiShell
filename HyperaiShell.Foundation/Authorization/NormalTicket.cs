@@ -2,7 +2,9 @@
 {
     public class NormalTicket : TicketBase
     {
-        public NormalTicket(string name) : base(name) { }
+        public NormalTicket(string name) : base(name)
+        {
+        }
 
         public override bool Verify()
         {

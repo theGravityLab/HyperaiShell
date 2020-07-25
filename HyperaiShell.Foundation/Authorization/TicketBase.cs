@@ -12,6 +12,7 @@ namespace HyperaiShell.Foundation.Authorization
 
         public string Name { get; private set; }
         public Regex Pattern { get; private set; }
+
         public abstract bool Verify();
     }
 }
