@@ -12,11 +12,13 @@ namespace HyperaiShell.Foundation.ModelExtensions
     {
         private static readonly IApiClient _client;
         private static readonly ILogger _logger;
+
         static ClientExtensions()
         {
             _client = Shared.Application.Provider.GetRequiredService<IApiClient>();
             _logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("HyperaiShell.Foundation.ModelExtensions.ClientExtensions");
         }
+
         public static async Task SendAsync(this Friend friend, MessageChain message)
         {
             _logger.LogInformation($"{_client.GetType().Name}(Friend) < {friend.Identifier} : {message}");

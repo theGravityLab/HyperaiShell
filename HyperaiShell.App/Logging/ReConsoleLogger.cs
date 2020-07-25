@@ -36,8 +36,7 @@ namespace HyperaiShell.App.Logging
                 LogLevel.Critical => "CRIT",
                 _ => "NONE",
             };
-            // [20/07/22 00:11][DEBG]NAME =>
-            // STHSTH
+            // [20/07/22 00:11][DEBG]NAME => STHSTH
             string datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Blue;

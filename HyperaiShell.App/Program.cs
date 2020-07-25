@@ -20,6 +20,7 @@ namespace HyperaiShell.App
     public static class Program
     {
         private static ILogger logger;
+
         private static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -112,6 +113,5 @@ namespace HyperaiShell.App
                 logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
             }
         }
-
     }
 }

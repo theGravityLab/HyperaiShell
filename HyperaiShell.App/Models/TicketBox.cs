@@ -7,6 +7,7 @@ namespace HyperaiShell.App.Models
     public class TicketBox
     {
         public List<TicketBase> Tickets { get; set; } = new List<TicketBase>();
+
         public bool Check(string name)
         {
             IEnumerable<TicketBase> mani = Tickets.Where(x => x.Pattern.Match(name).Success);

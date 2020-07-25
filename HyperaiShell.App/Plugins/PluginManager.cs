@@ -33,10 +33,10 @@ namespace HyperaiShell.App.Plugins
         }
 
         /// <summary>
-        /// 从文件中加载程序集并获取其中派生自 <see cref="PluginBase"/> 的类型(存在多个则取第一个
+        /// 从文件中加载程序集并获取其中派生自 <see cref="PluginBase" /> 的类型(存在多个则取第一个
         /// </summary>
         /// <param name="fileName">程序集文件</param>
-        /// <returns>含有 <see cref="PluginBase"/> 派生类型的集合</returns>
+        /// <returns>含有 <see cref="PluginBase" /> 派生类型的集合</returns>
         public Type Load(string fileName)
         {
             Assembly ass = Assembly.LoadFrom(fileName);
@@ -60,7 +60,7 @@ namespace HyperaiShell.App.Plugins
             NuspecReader nuspecReader = await reader.GetNuspecReaderAsync(CancellationToken.None);
             string identity = nuspecReader.GetId();
             IEnumerable<FrameworkSpecificGroup> groups = await reader.GetLibItemsAsync(CancellationToken.None);
-            FrameworkSpecificGroup group = groups.Where(x=>x.TargetFramework.GetShortFolderName().StartsWith("netstandard")).OrderByDescending(x=>x.TargetFramework.GetShortFolderName()).FirstOrDefault();
+            FrameworkSpecificGroup group = groups.Where(x => x.TargetFramework.GetShortFolderName().StartsWith("netstandard")).OrderByDescending(x => x.TargetFramework.GetShortFolderName()).FirstOrDefault();
             foreach (string packageFile in group.Items)
             {
                 if (!packageFile.EndsWith(".dll")) continue;
@@ -110,7 +110,6 @@ namespace HyperaiShell.App.Plugins
                     plugins.Add(type, context);
                 }
             }
-
         }
 
         /// <summary>
@@ -127,7 +126,7 @@ namespace HyperaiShell.App.Plugins
             }
             else
             {
-                throw new InvalidOperationException("Argument type for a plugin has not regeristerd yet.");
+                throw new InvalidOperationException("Argument type for a plugin has not regeristered yet.");
             }
         }
     }

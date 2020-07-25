@@ -11,7 +11,6 @@ namespace HyperaiShell.App.Services
 {
     public class BotService : IBotService
     {
-
         private BotCollection bots;
 
         private readonly IApiClient _client;
@@ -33,9 +32,11 @@ namespace HyperaiShell.App.Services
                 case FriendMessageEventArgs friendMessage:
                     DoForAll(x => x.OnFriendMessage(_client, friendMessage), self);
                     break;
+
                 case GroupMessageEventArgs groupMessage:
                     DoForAll(x => x.OnGroupMessage(_client, groupMessage), self);
                     break;
+
                 default:
                     break;
             }

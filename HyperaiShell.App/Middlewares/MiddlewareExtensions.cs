@@ -9,11 +9,13 @@ namespace HyperaiShell.App.Middlewares
             app.Use<BotMiddleware>();
             return app;
         }
+
         public static IHyperaiApplicationBuilder UseTranslator(this IHyperaiApplicationBuilder app)
         {
             app.Use<TranslatorMiddleware>();
             return app;
         }
+
         public static IHyperaiApplicationBuilder UseLogging(this IHyperaiApplicationBuilder app)
         {
             app.Use<LoggingMiddleware>();

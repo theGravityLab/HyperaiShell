@@ -22,6 +22,7 @@ namespace HyperaiShell.Foundation.Services
         }
 
         private bool isDisposed = false;
+
         protected virtual void Dispose(bool isDisposing)
         {
             if (!isDisposed && isDisposing)

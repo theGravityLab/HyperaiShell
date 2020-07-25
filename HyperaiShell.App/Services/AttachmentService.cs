@@ -12,11 +12,13 @@ namespace HyperaiShell.App.Services
     {
         private readonly IRepository _repository;
         private readonly ILogger _logger;
+
         public AttachmentService(IRepository repository, ILogger<AttachmentService> logger)
         {
             _repository = repository;
             _logger = logger;
         }
+
         public void Attach<T>(T ins, RelationModel toWhom)
         {
             string typeName = typeof(T).FullName;
