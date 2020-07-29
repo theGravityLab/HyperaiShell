@@ -63,7 +63,11 @@ namespace HyperaiShell.App.Plugins
             FrameworkSpecificGroup group = groups.Where(x => x.TargetFramework.GetShortFolderName().StartsWith("netstandard")).OrderByDescending(x => x.TargetFramework.GetShortFolderName()).FirstOrDefault();
             foreach (string packageFile in group.Items)
             {
-                if (!packageFile.EndsWith(".dll")) continue;
+                if (!packageFile.EndsWith(".dll"))
+                {
+                    continue;
+                }
+
                 string tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 string path = reader.ExtractFile(packageFile, tmpPath, NullLogger.Instance);
                 //Type type = Load(await File.ReadAllBytesAsync(path));

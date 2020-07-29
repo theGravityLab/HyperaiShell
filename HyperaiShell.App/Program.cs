@@ -77,9 +77,6 @@ namespace HyperaiShell.App
         /// <returns></returns>
         private static async Task FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing(IHyperaiApplicationBuilder app)
         {
-            //PluginManager.Instance.Init(app.Services);
-
-            // search for nupkg files and load then
             foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
             {
                 await PluginManager.Instance.LoadPackageAsync(file);
@@ -104,6 +101,7 @@ namespace HyperaiShell.App
         /// </summary>
         private static void MakeItWork(IHyperaiApplication app)
         {
+            // NOTE: search all units here
             app.Provider.GetRequiredService<IUnitService>().SearchForUnits();
             IBotService service = app.Provider.GetRequiredService<IBotService>();
             foreach (Type type in PluginManager.Instance.GetManagedPlugins())

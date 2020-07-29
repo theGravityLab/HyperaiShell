@@ -16,12 +16,8 @@ namespace HyperaiShell.App.Services
             IConfigurationSection profile = configuration.GetSection("Clients").GetChildren().Where(x => x["Name"] == profileName).First();
             Type clientType = null;
             Type optionsType = null;
-            Assembly ass = AppDomain.CurrentDomain.GetAssemblies().First(x => x.GetName().Name == profile["AssemblyName"]);
-            clientType = ass.GetType(profile["ClientTypeDefined"], false);
-            if (clientType != null)
-            {
-                optionsType = ass.GetType(profile["OptionsTypeDefined"], true);
-            }
+            clientType = Type.GetType(profile["ClientTypeDefined"], false);
+            optionsType = Type.GetType(profile["OptionsTypeDefined"], true);
             IConfigurationSection optionsSection = profile.GetSection("Options");
             services.AddSingleton(typeof(IApiClient), clientType);
             services.AddSingleton(optionsType, optionsSection.Get(optionsType));
