@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://github.com/theGravityLab/ProjHyperai">
-    <img src="docs/images/sucks.png" alt="Logo" width="180" height="117">
+    <img src="/theGravityLab/ProjHyperai/raw/master/.github/images/sucks.png" alt="Logo" width="180" height="117">
   </a>
 </p>
 
