@@ -79,7 +79,7 @@ dotnet add package HyperaiShell.Foundation
 - [Netlify](https://www.netlify.com/)
 
 <!-- links -->
-[project-path]:theGravityLab/ProjHyperai
+[project-path]:theGravityLab/HyperaiShell
 [contributors-shield]: https://img.shields.io/github/contributors/theGravityLab/HyperaiShell?style=for-the-badge
 [contributors-url]: https://github.com/theGravityLab/HyperaiShell/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/theGravityLab/HyperaiShell?style=for-the-badge
