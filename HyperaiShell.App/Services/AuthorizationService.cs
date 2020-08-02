@@ -40,21 +40,20 @@ namespace HyperaiShell.App.Services
 
         public void PutTicket(RelationModel model, TicketBase ticket)
         {
-            TicketBox ticketBox = model.Retrieve<TicketBox>();
-            if (ticketBox == null)
+            using(model.For(out TicketBox ticketBox, ()=> new TicketBox()))
             {
-                ticketBox = new TicketBox();
+                ticketBox.Put(ticket);
             }
-            ticketBox.Put(ticket);
-            model.Attach(ticketBox);
         }
 
         public void RemoveTicket(RelationModel model, string name)
         {
-            TicketBox ticketBox = model.Retrieve<TicketBox>();
-            if (ticketBox != null)
+            using (model.For(out TicketBox ticketBox))
             {
-                ticketBox.Remove(name);
+                if (ticketBox != null)
+                {
+                    ticketBox.Remove(name);
+                }
             }
         }
 
