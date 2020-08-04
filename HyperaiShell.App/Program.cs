@@ -21,7 +21,7 @@ namespace HyperaiShell.App
     {
         private static ILogger logger;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Console.CancelKeyPress += Console_CancelKeyPress;
@@ -46,7 +46,7 @@ namespace HyperaiShell.App
             HyperaiApplicationBuilder app = new HyperaiApplicationBuilder();
 
             app.UseStartup<Bootstrapper>();
-            FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing(app).Wait();
+            FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing().Wait();
             NothingToSay(app);
             Shared.Application = app.Build();
             logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
@@ -75,7 +75,7 @@ namespace HyperaiShell.App
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        private static async Task FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing(IHyperaiApplicationBuilder app)
+        private static async Task FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing()
         {
             foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
             {

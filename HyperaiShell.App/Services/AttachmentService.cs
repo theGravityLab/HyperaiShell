@@ -30,10 +30,12 @@ namespace HyperaiShell.App.Services
             }
             else
             {
-                first = new Attachment();
-                first.Target = toWhom.Identifier;
-                first.TypeName = typeName;
-                first.Object = ins;
+                first = new Attachment
+                {
+                    Target = toWhom.Identifier,
+                    TypeName = typeName,
+                    Object = ins
+                };
                 _repository.Store(first);
             }
         }
@@ -61,7 +63,7 @@ namespace HyperaiShell.App.Services
 
         public ForAttachmentUpdateScope<T> For<T>(RelationModel model, out T ins, Func<T> generator = null)
         {
-            T t = Retrieve<T>(model) ?? (generator ?? new Func<T>(() => default(T)))();
+            T t = Retrieve<T>(model) ?? (generator ?? new Func<T>(() => default))();
             ForAttachmentUpdateScope<T> scope = new ForAttachmentUpdateScope<T>(this, t, model);
             ins = t;
             return scope;

@@ -26,7 +26,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         public static T Retrieve<T>(this RelationModel model, Func<T> generator = null)
         {
-            generator = generator ?? new Func<T>(() => default(T));
+            generator ??= new Func<T>(() => default);
             T t = service.Retrieve<T>(model);
             if (t != null)
             {
@@ -37,7 +37,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
                 t = generator();
                 if (t == null)
                 {
-                    return default(T);
+                    return default;
                 }
                 else
                 {
