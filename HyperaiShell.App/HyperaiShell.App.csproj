@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <StartupObject>HyperaiShell.App.Program</StartupObject>
-    <AssemblyVersion>2020.7.24</AssemblyVersion>
+    <AssemblyVersion>2020.8.6</AssemblyVersion>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/theGravityLab/HyperaiShell.App</RepositoryUrl>
     <Authors>GravityLab</Authors>
