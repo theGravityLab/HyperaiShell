@@ -5,8 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Hyperai.Services;
-
 namespace HyperaiShell.Foundation.ModelExtensions
 {
     public static class MessageChainExtensions
