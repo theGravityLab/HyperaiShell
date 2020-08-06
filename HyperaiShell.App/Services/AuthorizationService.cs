@@ -40,7 +40,7 @@ namespace HyperaiShell.App.Services
 
         public void PutTicket(RelationModel model, TicketBase ticket)
         {
-            using(model.For(out TicketBox ticketBox, ()=> new TicketBox()))
+            using (model.For(out TicketBox ticketBox, () => new TicketBox()))
             {
                 ticketBox.Put(ticket);
             }

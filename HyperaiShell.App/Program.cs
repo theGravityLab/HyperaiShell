@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HyperaiShell.App
@@ -28,7 +29,7 @@ namespace HyperaiShell.App
 
             BsonMapper.Global = new BsonMapper(null, new AssemblyNameTypeNameBinder());
 
-            System.Collections.Generic.IEnumerable<string> dirs = new string[]
+            IEnumerable<string> dirs = new string[]
             {
                 "plugins",
                 "logs",

@@ -4,7 +4,6 @@ using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 
 namespace HyperaiShell.App.Services
 {
@@ -52,12 +51,8 @@ namespace HyperaiShell.App.Services
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
             string typeName = typeof(T).FullName;
             T ins = (T)_repository.Query<Attachment>().Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
-            watch.Stop();
-            _logger.LogDebug("Data query and deserilization took {} milliseconds for {}@{}", watch.ElapsedMilliseconds, typeof(T).Name, fromWhom.Identity);
             return ins;
         }
 

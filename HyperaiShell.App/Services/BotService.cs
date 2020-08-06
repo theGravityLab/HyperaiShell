@@ -5,6 +5,7 @@ using HyperaiShell.App.Bots;
 using HyperaiShell.Foundation.Bots;
 using HyperaiShell.Foundation.Services;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HyperaiShell.App.Services
@@ -37,6 +38,14 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnGroupMessage(_client, groupMessage), self);
                     break;
 
+                case FriendRecallEventArgs friendRecall:
+                    DoForAll(x => x.OnFriendRecall(_client, friendRecall), self);
+                    break;
+
+                case GroupRecallEventArgs groupRecall:
+                    DoForAll(x => x.OnGroupRecall(_client, groupRecall), self);
+                    break;
+
                 default:
                     break;
             }
@@ -52,7 +61,7 @@ namespace HyperaiShell.App.Services
             foreach (BotBase bot in bots)
             {
                 bot.Me = me;
-                action(bot);
+                Task.Run(() => action(bot), CancellationToken.None);
             }
         }
     }

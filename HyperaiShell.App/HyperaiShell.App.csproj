@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hyperai.Core" Version="2020.7.25" />
-    <PackageReference Include="Hyperai.Units" Version="2020.8.3" />
+    <PackageReference Include="Hyperai.Core" Version="2020.8.6" />
+    <PackageReference Include="Hyperai.Units" Version="2020.8.6" />
     <PackageReference Include="LiteDB" Version="5.0.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.6" />

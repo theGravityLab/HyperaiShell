@@ -1,5 +1,4 @@
 ﻿using Hyperai.Events;
-using Hyperai.Messages;
 using Hyperai.Middlewares;
 using Hyperai.Services;
 using Microsoft.Extensions.Logging;
