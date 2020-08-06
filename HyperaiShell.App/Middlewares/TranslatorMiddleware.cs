@@ -23,7 +23,7 @@ namespace HyperaiShell.App.Middlewares
                 string text = string.Join(string.Empty, msgEvent.Message.OfType<Plain>().Select(x => x.Text));
                 if (text.Length > 8 && (text.StartsWith("```\r") || text.StartsWith("```\n")) && (text.EndsWith("\r```") || text.EndsWith("\n```")))
                 {
-                    msgEvent.Message = _parser.Parse(text.Substring(4, text.Length - 8));
+                    msgEvent.Message = _parser.Parse(text[4..^4]);
                 }
             }
             return true;

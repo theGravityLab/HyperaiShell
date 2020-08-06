@@ -25,7 +25,7 @@ namespace HyperaiShell.App.Services
             if (user != null)
             {
                 user.IsBanned = false;
-                _repository.Update<BlockedUser>(user);
+                _repository.Update(user);
             }
         }
 

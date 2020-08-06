@@ -4,7 +4,6 @@ using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 
 namespace HyperaiShell.App.Services
 {
@@ -30,10 +29,12 @@ namespace HyperaiShell.App.Services
             }
             else
             {
-                first = new Attachment();
-                first.Target = toWhom.Identifier;
-                first.TypeName = typeName;
-                first.Object = ins;
+                first = new Attachment
+                {
+                    Target = toWhom.Identifier,
+                    TypeName = typeName,
+                    Object = ins
+                };
                 _repository.Store(first);
             }
         }
@@ -50,18 +51,14 @@ namespace HyperaiShell.App.Services
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
             string typeName = typeof(T).FullName;
             T ins = (T)_repository.Query<Attachment>().Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
-            watch.Stop();
-            _logger.LogDebug("Data query and deserilization took {} milliseconds for {}@{}", watch.ElapsedMilliseconds, typeof(T).Name, fromWhom.Identity);
             return ins;
         }
 
         public ForAttachmentUpdateScope<T> For<T>(RelationModel model, out T ins, Func<T> generator = null)
         {
-            T t = Retrieve<T>(model) ?? (generator ?? new Func<T>(() => default(T)))();
+            T t = Retrieve<T>(model) ?? (generator ?? new Func<T>(() => default))();
             ForAttachmentUpdateScope<T> scope = new ForAttachmentUpdateScope<T>(this, t, model);
             ins = t;
             return scope;
