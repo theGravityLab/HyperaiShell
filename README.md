@@ -69,6 +69,7 @@ dotnet add package HyperaiShell.Foundation
 ## 截图 | Screenshots
 
 ![screenshot](.github/images/screenshot.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FtheGravityLab%2FHyperaiShell.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FtheGravityLab%2FHyperaiShell?ref=badge_shield)
 
 ## 引用 | Reference
 
@@ -86,3 +87,6 @@ dotnet add package HyperaiShell.Foundation
 [forks-url]: https://github.com/theGravityLab/HyperaiShell/network/members
 [stars-shield]: https://img.shields.io/github/stars/theGravityLab/HyperaiShell?style=for-the-badge
 [stars-url]: https://github.com/theGravityLab/HyperaiShell/stargazers
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FtheGravityLab%2FHyperaiShell.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FtheGravityLab%2FHyperaiShell?ref=badge_large)
