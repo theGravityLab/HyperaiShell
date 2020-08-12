@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.LiteDB;
+using Hangfire.MemoryStorage;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
@@ -52,7 +53,7 @@ namespace HyperaiShell.App.Services
 
         public static IServiceCollection AddHangfire(this IServiceCollection services)
         {
-            GlobalConfiguration.Configuration.UseLiteDbStorage("data/hangfire.litedb.db");
+            GlobalConfiguration.Configuration.UseMemoryStorage();
             return services;
         }
     }
