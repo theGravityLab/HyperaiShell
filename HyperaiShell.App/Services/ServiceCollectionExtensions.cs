@@ -1,4 +1,6 @@
-﻿using Hyperai.Services;
+﻿using Hangfire;
+using Hangfire.LiteDB;
+using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +47,12 @@ namespace HyperaiShell.App.Services
         public static IServiceCollection AddBlacklist(this IServiceCollection services)
         {
             services.AddSingleton<IBlockService, BlockService>();
+            return services;
+        }
+
+        public static IServiceCollection AddHangfire(this IServiceCollection services)
+        {
+            GlobalConfiguration.Configuration.UseLiteDbStorage("data/hangfire.litedb.db");
             return services;
         }
     }

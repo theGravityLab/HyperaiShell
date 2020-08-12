@@ -109,7 +109,7 @@ namespace HyperaiShell.App.Plugins
                     {
                         context.Configuration = new Lazy<IConfiguration>(() => (new ConfigurationBuilder().Build()));
                     }
-                    string dataFile = Path.Combine(meta.SpaceDirectory, "data.db");
+                    string dataFile = Path.Combine(meta.SpaceDirectory, "data.litedb.db");
                     context.Repository = new Lazy<IRepository>(() => new LiteDbRepository(new LiteDatabase(dataFile)));
                     plugins.Add(type, context);
                 }

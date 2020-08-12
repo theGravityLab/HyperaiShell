@@ -32,7 +32,8 @@ namespace HyperaiShell.App
             IConfigurationBuilder cfgBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false);
             IConfigurationRoot config = cfgBuilder.Build();
 
-            LiteDatabase database = new LiteDatabase("data/internal.db");
+            string dbName = "data/internal.litedb.db";
+            LiteDatabase database = new LiteDatabase(dbName);
             LiteDbRepository repository = new LiteDbRepository(database);
 
             services.AddSingleton<IConfiguration>(config);
@@ -50,6 +51,7 @@ namespace HyperaiShell.App
             services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
             services.AddScoped<IMessageChainFormatter, HyperCodeFormatter>();
             services.AddScoped<IMessageChainParser, HyperCodeParser>();
+            services.AddHangfire();
             services.AddDistributedMemoryCache();
             services.AddBots();
             services.AddClients(config);
