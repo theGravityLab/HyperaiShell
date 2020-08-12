@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using Hangfire.LiteDB;
 using Hangfire.MemoryStorage;
+using Hangfire.Storage.SQLite;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +54,8 @@ namespace HyperaiShell.App.Services
 
         public static IServiceCollection AddHangfire(this IServiceCollection services)
         {
-            GlobalConfiguration.Configuration.UseMemoryStorage();
+            GlobalConfiguration.Configuration.UseSerilogLogProvider();
+            GlobalConfiguration.Configuration.UseSQLiteStorage("data/hangfire.sqlite.db");
             return services;
         }
     }
