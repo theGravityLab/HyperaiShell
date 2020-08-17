@@ -20,7 +20,7 @@
     <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="Hangfire.Storage.SQLite" Version="0.2.4" />
     <PackageReference Include="Hyperai.Core" Version="2020.8.6" />
-    <PackageReference Include="Hyperai.Units" Version="2020.8.13" />
+    <PackageReference Include="Hyperai.Units" Version="2020.8.17" />
     <PackageReference Include="LiteDB" Version="5.0.9" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.7" />
