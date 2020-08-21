@@ -49,5 +49,18 @@ namespace HyperaiShell.Foundation.ModelExtensions
         {
             await _client.RevokeMessageAsync(((Source)chain.First(x => x is Source)).MessageId);
         }
+
+        /// <summary>
+        /// 当其包含 Quote 时, 获取目标 <see cref="MessageChain"/>
+        /// </summary>
+        /// <param name="chain">包含 <see cref="Quote"/> 的消息链</param>
+        /// <returns>源消息链</returns>
+        public static async Task<MessageChain> OfMessageRepliedByAsync(this MessageChain chain)
+        {
+            Quote quote = chain.First(x => x is Quote) as Quote;
+            MessageChain id = MessageChain.Construct(new Source(quote.MessageId));
+            MessageChain src = await _client.RequestAsync(id);
+            return src;
+        }
     }
 }
