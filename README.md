@@ -54,7 +54,7 @@ HyperaiShell 仅能处理消息, 消息接收发送需要[**适配器**](https:/
 |平台|媒介|项目|
 |--|--|--|
 |OICQ|[mirai-api-http](https://github.com/project-mirai/mirai-api-http)|[Ac682.Hyperai.Clients.Mirai](https://github.com/ac682/Ac682.Hyperai.Clients.Mirai)|
-|OICQ|[go-cqhttp](https://github.com/Mrs4s/go-cqhttp)|[Ac682.Hyperai.Clients.CQHTTP](https://github.com/ac682/Ac682.Hyperai.Clients.CQHTTP|)
+|OICQ|[go-cqhttp](https://github.com/Mrs4s/go-cqhttp)|[Ac682.Hyperai.Clients.CQHTTP](https://github.com/ac682/Ac682.Hyperai.Clients.CQHTTP)|
 |OICQ|[CQHTTP](https://github.com/richardchien/coolq-http-api)|🈚(你去PR就有了)|
 |Telegram|[TG-API](https://core.telegram.org/api)|🈚(你去PR就有了)|
 
