@@ -46,7 +46,7 @@ namespace HyperaiShell.App.Logging
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write(datetime);
                 (ConsoleColor, ConsoleColor) color = GetColor(logLevel);
-                Console.BackgroundColor = color.Item1;
+                if (color.Item1 != ConsoleColor.Black) Console.BackgroundColor = color.Item1;
                 Console.ForegroundColor = color.Item2;
                 Console.Write($"[{levelName}]");
                 Console.ResetColor();
