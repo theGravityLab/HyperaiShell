@@ -46,6 +46,59 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnGroupRecall(_client, groupRecall), self);
                     break;
 
+                
+                 
+                case FriendRequestEventArgs friendRequest:
+                    DoForAll(x => x.OnFriendRequest(_client, friendRequest), self);
+                    break;
+                
+                case GroupMemberRequestEventArgs groupMemberRequest:
+                    DoForAll(x => x.OnMemberRequest(_client, groupMemberRequest), self);
+                    break;
+                
+                case FriendRequestResponsedEventArgs friendRequestResp:
+                    DoForAll(x => x.OnFriendRequestResp(_client, friendRequestResp), self);
+                    break;
+                
+                case MemberRequestResponsedEventArgs memberRequestResp:
+                    DoForAll(x => x.OnMemberRequestResp(_client, memberRequestResp), self);
+                    break;
+                
+                case GroupJoinedEventArgs groupJoined:
+                    DoForAll(x => x.OnGroupJoined(_client, groupJoined), self);
+                    break;
+                
+                case GroupLeftEventArgs groupLeft:
+                    DoForAll(x => x.OnGroupLeft(_client, groupLeft), self);
+                    break;
+                
+                case GroupMemberCardChangedEventArgs groupMemberCardChanged:
+                    DoForAll(x => x.OnGroupMemberCardChanged(_client, groupMemberCardChanged), self);
+                    break;
+                
+                case GroupMemberTitleChangedEventArgs groupMemberTitleChanged:
+                    DoForAll(x => x.OnGroupMemberTitleChanged(_client, groupMemberTitleChanged), self);
+                    break;
+                
+                case GroupMutedEventArgs groupMuted:
+                    DoForAll(x => x.OnGroupMuted(_client, groupMuted), self);
+                    break;
+                
+                case GroupNameChangedEventArgs groupNameChanged:
+                    DoForAll(x => x.OnGroupNameChanged(_client, groupNameChanged), self);
+                    break;
+                
+                case GroupPermissionChangedEventArgs groupPermissionChanged:
+                    DoForAll(x => x.OnGroupPermissionChanged(_client, groupPermissionChanged), self);
+                    break;
+                
+                case GroupUnmutedEventArgs groupUnmuted:
+                    DoForAll(x => x.OnGroupUnmuted(_client, groupUnmuted), self);
+                    break;
+                
+                case InvitationResponsedEventArgs invitationResp:
+                    DoForAll(x => x.OnInvitationResp(_client, invitationResp), self);
+                    break;
                 default:
                     break;
             }
