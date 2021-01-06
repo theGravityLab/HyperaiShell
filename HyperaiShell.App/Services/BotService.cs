@@ -45,9 +45,7 @@ namespace HyperaiShell.App.Services
                 case GroupRecallEventArgs groupRecall:
                     DoForAll(x => x.OnGroupRecall(_client, groupRecall), self);
                     break;
-
                 
-                 
                 case FriendRequestEventArgs friendRequest:
                     DoForAll(x => x.OnFriendRequest(_client, friendRequest), self);
                     break;
