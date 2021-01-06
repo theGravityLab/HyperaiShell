@@ -48,9 +48,9 @@ namespace HyperaiShell.App
 
             app.UseStartup<Bootstrapper>();
             FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing().Wait();
+            NothingToSay(app);
             Shared.Application = app.Build();
             logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
-            NothingToSay(app);
             MakeItWork(Shared.Application);
             Shared.Application.Run();
         }
@@ -93,7 +93,7 @@ namespace HyperaiShell.App
             foreach (Type type in plugins)
             {
                 PluginBase plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureServices(app.Services,Shared.Application.Provider.GetRequiredService<IConfiguration>());
+                plugin.ConfigureServices(app.Services);
             }
         }
 
@@ -108,7 +108,7 @@ namespace HyperaiShell.App
             foreach (Type type in PluginManager.Instance.GetManagedPlugins())
             {
                 PluginBase plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureBots(service.Builder);
+                plugin.ConfigureBots(service.Builder,Shared.Application.Provider.GetRequiredService<IConfiguration>());
                 logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
             }
         }
