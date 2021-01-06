@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace HyperaiShell.App
 {
@@ -47,9 +48,9 @@ namespace HyperaiShell.App
 
             app.UseStartup<Bootstrapper>();
             FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing().Wait();
-            NothingToSay(app);
             Shared.Application = app.Build();
             logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
+            NothingToSay(app);
             MakeItWork(Shared.Application);
             Shared.Application.Run();
         }
@@ -92,7 +93,7 @@ namespace HyperaiShell.App
             foreach (Type type in plugins)
             {
                 PluginBase plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureServices(app.Services);
+                plugin.ConfigureServices(app.Services,Shared.Application.Provider.GetRequiredService<IConfiguration>());
             }
         }
 
