@@ -74,8 +74,6 @@ namespace HyperaiShell.App
         /// <summary>
         /// 搜索插件并加载
         /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
         private static async Task FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing()
         {
             foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
@@ -105,10 +103,12 @@ namespace HyperaiShell.App
             // NOTE: search all units here
             app.Provider.GetRequiredService<IUnitService>().SearchForUnits();
             IBotService service = app.Provider.GetRequiredService<IBotService>();
+            IConfiguration config = app.Provider.GetRequiredService<IConfiguration>();
             foreach (Type type in PluginManager.Instance.GetManagedPlugins())
             {
                 PluginBase plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureBots(service.Builder,Shared.Application.Provider.GetRequiredService<IConfiguration>());
+                plugin.ConfigureBots(service.Builder);
+                plugin.PostConfigure(config);
                 logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
             }
         }

@@ -11,5 +11,7 @@ namespace HyperaiShell.Foundation.Plugins
         public abstract void ConfigureBots(IBotCollectionBuilder bots,IConfiguration configuration);
 
         public abstract void ConfigureServices(IServiceCollection services);
+
+        public abstract void PostConfigure(IConfiguration config);
     }
 }
