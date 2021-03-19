@@ -49,7 +49,8 @@ namespace HyperaiShell.App
             app.UseStartup<Bootstrapper>();
             FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing().Wait();
             NothingToSay(app);
-            Shared.Application = app.Build();logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
+            Shared.Application = app.Build();
+            logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
             MakeItWork(Shared.Application);
             Shared.Application.Run();
         }

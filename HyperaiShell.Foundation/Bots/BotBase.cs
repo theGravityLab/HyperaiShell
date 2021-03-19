@@ -1,5 +1,7 @@
-﻿using Hyperai.Events;
+﻿using System.Threading.Tasks;
+using Hyperai.Events;
 using Hyperai.Relations;
+using Hyperai.Services;
 
 namespace HyperaiShell.Foundation.Bots
 {
@@ -74,7 +76,15 @@ namespace HyperaiShell.Foundation.Bots
         public virtual void OnInvitationResp(object sender, InvitationResponsedEventArgs args)
         {
         }
-
+        
+        public virtual void OnGroupMemberLeft(object sender, GroupMemberLeftEventArgs groupMemberLeft)
+        {
+        }
+        
+        public virtual void OnGroupMemberJoined(object sender, GroupMemberJoinedEventArgs groupMemberLeft)
+        {
+        }
+        
         public virtual void OnEverything(object sender, GenericEventArgs args)
         {
         }

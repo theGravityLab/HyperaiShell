@@ -66,6 +66,14 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnGroupJoined(_client, groupJoined), self);
                     break;
                 
+                case GroupMemberJoinedEventArgs groupMemberJoined:
+                    DoForAll(x => x.OnGroupMemberJoined(_client, groupMemberJoined), self);
+                    break;
+                
+                case GroupMemberLeftEventArgs groupMemberLeft:
+                    DoForAll(x => x.OnGroupMemberLeft(_client, groupMemberLeft), self);
+                    break;
+                
                 case GroupLeftEventArgs groupLeft:
                     DoForAll(x => x.OnGroupLeft(_client, groupLeft), self);
                     break;
