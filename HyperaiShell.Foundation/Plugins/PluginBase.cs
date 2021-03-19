@@ -8,7 +8,7 @@ namespace HyperaiShell.Foundation.Plugins
     {
         public virtual IPluginContext Context { get; set; }
 
-        public abstract void ConfigureBots(IBotCollectionBuilder bots,IConfiguration configuration);
+        public abstract void ConfigureBots(IBotCollectionBuilder bots, IConfiguration config);
 
         public abstract void ConfigureServices(IServiceCollection services);
 

@@ -107,7 +107,7 @@ namespace HyperaiShell.App
             foreach (Type type in PluginManager.Instance.GetManagedPlugins())
             {
                 PluginBase plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureBots(service.Builder);
+                plugin.ConfigureBots(service.Builder, config);
                 plugin.PostConfigure(config);
                 logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
             }
