@@ -47,11 +47,11 @@ namespace HyperaiShell.App
             HyperaiApplicationBuilder app = new HyperaiApplicationBuilder();
 
             app.UseStartup<Bootstrapper>();
-            FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing().Wait();
-            NothingToSay(app);
+            LoadPackages().Wait();
+            SearchConfigurePluginServices(app);
             Shared.Application = app.Build();
             logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
-            MakeItWork(Shared.Application);
+            ConfigurePlugins(Shared.Application);
             Shared.Application.Run();
         }
 
@@ -64,17 +64,21 @@ namespace HyperaiShell.App
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            Exception exception = (Exception)e.ExceptionObject;
             if (e.IsTerminating)
             {
-                logger.LogCritical((Exception)e.ExceptionObject, "Terminating for exception uncaught.");
+                logger.LogCritical(exception, "Terminating for exception uncaught.");
                 Environment.ExitCode = -1;
+            }else
+            {
+                logger.LogError(exception, "Exception caught.");
             }
         }
 
         /// <summary>
         /// 搜索插件并加载
         /// </summary>
-        private static async Task FuckUnitTestButMyGuidelineTellMeItIsRequiredInHugeProjectsSoHaveToKeepItBYWSomeTestsMayNotWorkAndMissing()
+        private static async Task LoadPackages()
         {
             foreach (string file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
             {
@@ -85,7 +89,7 @@ namespace HyperaiShell.App
         /// <summary>
         /// 使插件生效
         /// </summary>
-        private static void NothingToSay(IHyperaiApplicationBuilder app)
+        private static void SearchConfigurePluginServices(IHyperaiApplicationBuilder app)
         {
             IEnumerable<Type> plugins = PluginManager.Instance.GetManagedPlugins();
             foreach (Type type in plugins)
@@ -98,7 +102,7 @@ namespace HyperaiShell.App
         /// <summary>
         /// 初始化部分服务
         /// </summary>
-        private static void MakeItWork(IHyperaiApplication app)
+        private static void ConfigurePlugins(IHyperaiApplication app)
         {
             // NOTE: search all units here
             app.Provider.GetRequiredService<IUnitService>().SearchForUnits();
