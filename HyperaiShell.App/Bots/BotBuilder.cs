@@ -1,13 +1,13 @@
-﻿using HyperaiShell.Foundation.Bots;
+﻿using System;
+using HyperaiShell.Foundation.Bots;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace HyperaiShell.App.Bots
 {
     public class BotBuilder : IBotBuilder
     {
         private readonly Type _botType;
-        private Action<BotBase> _configure = null;
+        private Action<BotBase> _configure;
 
         public BotBuilder(Type botType)
         {
@@ -16,7 +16,7 @@ namespace HyperaiShell.App.Bots
 
         public BotBase Build(IServiceProvider provider)
         {
-            BotBase bot = (BotBase)(ActivatorUtilities.CreateInstance(provider, _botType));
+            var bot = (BotBase) ActivatorUtilities.CreateInstance(provider, _botType);
             _configure?.Invoke(bot);
 
             return bot;

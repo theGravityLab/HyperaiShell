@@ -1,5 +1,5 @@
-﻿using HyperaiShell.Foundation.Authorization;
-using System;
+﻿using System;
+using HyperaiShell.Foundation.Authorization;
 
 namespace HyperaiShell.App.Models
 {
@@ -7,19 +7,19 @@ namespace HyperaiShell.App.Models
     {
         public static void PutExpiryTicket(this TicketBox box, string name, DateTime expiration)
         {
-            ExpiryTicket ticket = new ExpiryTicket(name, expiration);
+            var ticket = new ExpiryTicket(name, expiration);
             box.Put(ticket);
         }
 
         public static void PutLimitedTicket(this TicketBox box, string name, int count)
         {
-            LimitedUseTicket ticket = new LimitedUseTicket(name, count);
+            var ticket = new LimitedUseTicket(name, count);
             box.Put(ticket);
         }
 
         public static void PutTicket(this TicketBox box, string name)
         {
-            NormalTicket ticket = new NormalTicket(name);
+            var ticket = new NormalTicket(name);
             box.Put(ticket);
         }
 

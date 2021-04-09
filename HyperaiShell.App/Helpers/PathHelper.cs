@@ -6,7 +6,10 @@ namespace HyperaiShell.App.Helpers
     {
         public static string Absolute2Relative(string rel)
         {
-            return Absolute2Relative((Environment.CurrentDirectory.EndsWith('/') || Environment.CurrentDirectory.EndsWith('\\')) ? Environment.CurrentDirectory : Environment.CurrentDirectory + '/', rel);
+            return Absolute2Relative(
+                Environment.CurrentDirectory.EndsWith('/') || Environment.CurrentDirectory.EndsWith('\\')
+                    ? Environment.CurrentDirectory
+                    : Environment.CurrentDirectory + '/', rel);
         }
 
         public static string Absolute2Relative(string b, string r)

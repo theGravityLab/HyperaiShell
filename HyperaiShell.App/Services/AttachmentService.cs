@@ -1,16 +1,16 @@
-﻿using Hyperai.Relations;
+﻿using System;
+using Hyperai.Relations;
 using HyperaiShell.App.Models;
 using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace HyperaiShell.App.Services
 {
     public class AttachmentService : IAttachmentService
     {
-        private readonly IRepository _repository;
         private readonly ILogger _logger;
+        private readonly IRepository _repository;
 
         public AttachmentService(IRepository repository, ILogger<AttachmentService> logger)
         {
@@ -20,8 +20,9 @@ namespace HyperaiShell.App.Services
 
         public void Attach<T>(T ins, RelationModel toWhom)
         {
-            string typeName = typeof(T).FullName;
-            Attachment first = _repository.Query<Attachment>().Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
+            var typeName = typeof(T).FullName;
+            var first = _repository.Query<Attachment>()
+                .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
             if (first != null)
             {
                 first.Object = ins;
@@ -41,25 +42,24 @@ namespace HyperaiShell.App.Services
 
         public void Detach<T>(RelationModel toWhom)
         {
-            string typeName = typeof(T).FullName;
-            Attachment first = _repository.Query<Attachment>().Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
-            if (first != null)
-            {
-                _repository.Delete<Attachment>(first.Id);
-            }
+            var typeName = typeof(T).FullName;
+            var first = _repository.Query<Attachment>()
+                .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
+            if (first != null) _repository.Delete<Attachment>(first.Id);
         }
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
-            string typeName = typeof(T).FullName;
-            T ins = (T)_repository.Query<Attachment>().Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
+            var typeName = typeof(T).FullName;
+            var ins = (T) _repository.Query<Attachment>()
+                .Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
             return ins;
         }
 
         public ForAttachmentUpdateScope<T> For<T>(RelationModel model, out T ins, Func<T> generator = null)
         {
-            T t = Retrieve<T>(model) ?? (generator ?? new Func<T>(() => default))();
-            ForAttachmentUpdateScope<T> scope = new ForAttachmentUpdateScope<T>(this, t, model);
+            var t = Retrieve<T>(model) ?? (generator ?? (() => default))();
+            var scope = new ForAttachmentUpdateScope<T>(this, t, model);
             ins = t;
             return scope;
         }

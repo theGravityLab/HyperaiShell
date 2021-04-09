@@ -19,11 +19,13 @@ namespace HyperaiShell.App.Middlewares
             switch (eventArgs)
             {
                 case GroupMessageEventArgs args:
-                    _logger.LogInformation("GroupMessageEventArgs received {0}:\n{1}=>{2}", args.User.DisplayName, args.Group.Name, args.Message);
+                    _logger.LogInformation("GroupMessageEventArgs received {0}:\n{1}=>{2}", args.User.DisplayName,
+                        args.Group.Name, args.Message);
                     break;
 
                 case FriendMessageEventArgs args:
-                    _logger.LogInformation("FriendMessageEventArgs received {0}:\n{1}", args.User.Nickname, args.Message);
+                    _logger.LogInformation("FriendMessageEventArgs received {0}:\n{1}", args.User.Nickname,
+                        args.Message);
                     break;
 
                 default:

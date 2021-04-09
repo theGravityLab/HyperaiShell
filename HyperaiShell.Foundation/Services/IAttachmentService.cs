@@ -1,5 +1,5 @@
-﻿using Hyperai.Relations;
-using System;
+﻿using System;
+using Hyperai.Relations;
 
 namespace HyperaiShell.Foundation.Services
 {

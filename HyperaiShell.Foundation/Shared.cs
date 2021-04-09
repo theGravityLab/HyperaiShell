@@ -1,5 +1,4 @@
 ﻿using Hyperai;
-using Microsoft.Extensions.Configuration;
 
 namespace HyperaiShell.Foundation
 {

@@ -1,6 +1,6 @@
-﻿using Hyperai.Events;
+﻿using System.Threading.Tasks;
+using Hyperai.Events;
 using HyperaiShell.Foundation.Bots;
-using System.Threading.Tasks;
 
 namespace HyperaiShell.Foundation.Services
 {

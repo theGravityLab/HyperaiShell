@@ -1,6 +1,6 @@
-﻿using HyperaiShell.Foundation.Plugins;
+﻿using System;
+using HyperaiShell.Foundation.Plugins;
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace HyperaiShell.App.Plugins
 {

@@ -1,7 +1,7 @@
-﻿using Hyperai.Relations;
+﻿using System;
+using Hyperai.Relations;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace HyperaiShell.Foundation.ModelExtensions
 {
@@ -15,18 +15,18 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 将一个对象附加到 <see cref="RelationModel"/> 上, 有则替换
+        ///     将一个对象附加到 <see cref="RelationModel" /> 上, 有则替换
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="model">目标关系模型</param>
         /// <param name="ins">实例</param>
         public static void Attach<T>(this RelationModel model, T ins)
         {
-            service.Attach<T>(ins, model);
+            service.Attach(ins, model);
         }
 
         /// <summary>
-        /// 将 <typeparamref name="T"/> 类型的对象从 <see cref="RelationModel"/> 上移除
+        ///     将 <typeparamref name="T" /> 类型的对象从 <see cref="RelationModel" /> 上移除
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="model">目标关系模型</param>
@@ -36,7 +36,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 获取附加在 <see cref="RelationModel"/> 上的 <typeparamref name="T"/> 对象
+        ///     获取附加在 <see cref="RelationModel" /> 上的 <typeparamref name="T" /> 对象
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="model">目标关系模型</param>
@@ -44,29 +44,22 @@ namespace HyperaiShell.Foundation.ModelExtensions
         /// <returns></returns>
         public static T Retrieve<T>(this RelationModel model, Func<T> generator = null)
         {
-            generator ??= new Func<T>(() => default);
-            T t = service.Retrieve<T>(model);
-            if (t != null)
+            generator ??= () => default;
+            var t = service.Retrieve<T>(model);
+            if (t != null) return t;
+
+            t = generator();
+            if (t == null)
             {
-                return t;
+                return default;
             }
-            else
-            {
-                t = generator();
-                if (t == null)
-                {
-                    return default;
-                }
-                else
-                {
-                    service.Attach(t, model);
-                    return t;
-                }
-            }
+
+            service.Attach(t, model);
+            return t;
         }
 
         /// <summary>
-        /// 获取 <typeparamref name="T"/> 类型对象并使用 using 语句来自动提交更新
+        ///     获取 <typeparamref name="T" /> 类型对象并使用 using 语句来自动提交更新
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="model">目标关系模型</param>
@@ -75,7 +68,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         /// <returns></returns>
         public static ForAttachmentUpdateScope<T> For<T>(this RelationModel model, out T ins, Func<T> generator = null)
         {
-            return service.For<T>(model, out ins, generator);
+            return service.For(model, out ins, generator);
         }
     }
 }

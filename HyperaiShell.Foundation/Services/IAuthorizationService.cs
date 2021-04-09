@@ -1,6 +1,6 @@
-﻿using Hyperai.Relations;
+﻿using System.Collections.Generic;
+using Hyperai.Relations;
 using HyperaiShell.Foundation.Authorization;
-using System.Collections.Generic;
 
 namespace HyperaiShell.Foundation.Services
 {

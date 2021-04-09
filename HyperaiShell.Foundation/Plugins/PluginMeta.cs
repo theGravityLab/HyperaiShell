@@ -1,10 +1,10 @@
 ﻿namespace HyperaiShell.Foundation.Plugins
 {
-    public struct PluginMeta
+    public readonly struct PluginMeta
     {
-        public string Identity { get; private set; }
-        public string FileBase { get; private set; }
-        public string SpaceDirectory { get; private set; }
+        public string Identity { get; }
+        public string FileBase { get; }
+        public string SpaceDirectory { get; }
 
         public PluginMeta(string identity, string fileBase, string configDirectory)
         {

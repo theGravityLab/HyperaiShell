@@ -1,11 +1,11 @@
-﻿using Hyperai.Relations;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Hyperai.Relations;
 using HyperaiShell.App.Models;
 using HyperaiShell.Foundation.Authorization;
 using HyperaiShell.Foundation.ModelExtensions;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace HyperaiShell.App.Services
 {
@@ -20,27 +20,22 @@ namespace HyperaiShell.App.Services
 
         public bool CheckTicket(RelationModel model, string specificName)
         {
-            if (specificName == "whosyourdaddy" && _daddy != null && _daddy == model.Identity.ToString())
-            {
-                return true;
-            }
+            if (specificName == "whosyourdaddy" && _daddy != null && _daddy == model.Identity.ToString()) return true;
 
-            TicketBox ticketBox = model.Retrieve<TicketBox>();
+            var ticketBox = model.Retrieve<TicketBox>();
             if (ticketBox == null)
             {
                 return false;
             }
-            else
-            {
-                bool pass = ticketBox.Check(specificName);
-                model.Attach(ticketBox);
-                return pass;
-            }
+
+            var pass = ticketBox.Check(specificName);
+            model.Attach(ticketBox);
+            return pass;
         }
 
         public void PutTicket(RelationModel model, TicketBase ticket)
         {
-            using (model.For(out TicketBox ticketBox, () => new TicketBox()))
+            using (model.For(out var ticketBox, () => new TicketBox()))
             {
                 ticketBox.Put(ticket);
             }
@@ -50,20 +45,14 @@ namespace HyperaiShell.App.Services
         {
             using (model.For(out TicketBox ticketBox))
             {
-                if (ticketBox != null)
-                {
-                    ticketBox.Remove(name);
-                }
+                if (ticketBox != null) ticketBox.Remove(name);
             }
         }
 
         public IEnumerable<TicketBase> GetTickets(RelationModel model)
         {
-            TicketBox ticketBox = model.Retrieve<TicketBox>();
-            if (ticketBox != null)
-            {
-                return ticketBox.GetTickets();
-            }
+            var ticketBox = model.Retrieve<TicketBox>();
+            if (ticketBox != null) return ticketBox.GetTickets();
             return Enumerable.Empty<TicketBase>();
         }
     }

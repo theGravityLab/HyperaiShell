@@ -10,8 +10,8 @@ namespace HyperaiShell.Foundation.Authorization
             Pattern = new Regex(Regex.Escape(name).Replace(@"\*\*", "[a-z0-9.]+").Replace(@"\*", "[a-z0-9]+"));
         }
 
-        public string Name { get; private set; }
-        public Regex Pattern { get; private set; }
+        public string Name { get; }
+        public Regex Pattern { get; }
 
         public abstract bool Verify();
     }

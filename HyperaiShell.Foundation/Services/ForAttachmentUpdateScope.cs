@@ -1,13 +1,15 @@
-﻿using Hyperai.Relations;
-using System;
+﻿using System;
+using Hyperai.Relations;
 
 namespace HyperaiShell.Foundation.Services
 {
     public class ForAttachmentUpdateScope<T> : IDisposable
     {
-        private readonly IAttachmentService _service;
         private readonly T _instance;
+        private readonly IAttachmentService _service;
         private readonly RelationModel _toWhom;
+
+        private bool isDisposed;
 
         public ForAttachmentUpdateScope(IAttachmentService service, T instance, RelationModel toWhom)
         {
@@ -21,16 +23,11 @@ namespace HyperaiShell.Foundation.Services
             Dispose(true);
         }
 
-        private bool isDisposed = false;
-
         protected virtual void Dispose(bool isDisposing)
         {
             if (!isDisposed && isDisposing)
             {
-                if (_instance != null)
-                {
-                    _service.Attach(_instance, _toWhom);
-                }
+                if (_instance != null) _service.Attach(_instance, _toWhom);
                 isDisposed = true;
             }
         }

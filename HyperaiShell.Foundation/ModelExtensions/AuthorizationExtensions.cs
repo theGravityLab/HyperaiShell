@@ -1,9 +1,9 @@
-﻿using Hyperai.Relations;
-using HyperaiShell.Foundation.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hyperai.Relations;
+using HyperaiShell.Foundation.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperaiShell.Foundation.ModelExtensions
 {

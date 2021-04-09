@@ -1,13 +1,11 @@
-﻿using Hangfire;
-using Hangfire.LiteDB;
-using Hangfire.MemoryStorage;
+﻿using System;
+using System.Linq;
+using Hangfire;
 using Hangfire.Storage.SQLite;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 
 namespace HyperaiShell.App.Services
 {
@@ -15,14 +13,15 @@ namespace HyperaiShell.App.Services
     {
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
         {
-            string profileName = configuration["Application:SelectedClientName"];
-            IConfigurationSection profile = configuration.GetSection("Clients").GetChildren().Where(x => x["Name"] == profileName).First();
-            Type clientType = null;
-            Type optionsType = null;
-            clientType = Type.GetType(profile["ClientTypeDefined"], false);
-            optionsType = Type.GetType(profile["OptionsTypeDefined"], true);
-            IConfigurationSection optionsSection = profile.GetSection("Options");
-            services.AddSingleton(typeof(IApiClient), clientType);
+            var profileName = configuration["Application:SelectedClientName"];
+            var profile = configuration
+                .GetSection("Clients")
+                .GetChildren()
+                .First(x => x["Name"] == profileName);
+            var clientType = Type.GetType(profile["ClientTypeDefined"], false);
+            var optionsType = Type.GetType(profile["OptionsTypeDefined"], true);
+            var optionsSection = profile.GetSection("Options");
+            services.AddSingleton(typeof(IApiClient), clientType!);
             services.AddSingleton(optionsType, optionsSection.Get(optionsType));
 
             return services;

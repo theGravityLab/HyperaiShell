@@ -1,9 +1,9 @@
-﻿using Hyperai.Events;
+﻿using System.Linq;
+using Hyperai.Events;
 using Hyperai.Messages;
 using Hyperai.Messages.ConcreteModels;
 using Hyperai.Middlewares;
 using Hyperai.Services;
-using System.Linq;
 
 namespace HyperaiShell.App.Middlewares
 {
@@ -20,12 +20,11 @@ namespace HyperaiShell.App.Middlewares
         {
             if (args is MessageEventArgs msgEvent)
             {
-                string text = string.Join(string.Empty, msgEvent.Message.OfType<Plain>().Select(x => x.Text));
-                if (text.Length > 8 && (text.StartsWith("```\r") || text.StartsWith("```\n")) && (text.EndsWith("\r```") || text.EndsWith("\n```")))
-                {
-                    msgEvent.Message = _parser.Parse(text[5..^4]);
-                }
+                var text = string.Join(string.Empty, msgEvent.Message.OfType<Plain>().Select(x => x.Text));
+                if (text.Length > 8 && (text.StartsWith("```\r") || text.StartsWith("```\n")) &&
+                    (text.EndsWith("\r```") || text.EndsWith("\n```"))) msgEvent.Message = _parser.Parse(text[5..^4]);
             }
+
             return true;
         }
     }

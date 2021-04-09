@@ -1,6 +1,6 @@
-﻿using HyperaiShell.Foundation.Authorization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HyperaiShell.Foundation.Authorization;
 
 namespace HyperaiShell.App.Models
 {
@@ -10,21 +10,16 @@ namespace HyperaiShell.App.Models
 
         public bool Check(string name)
         {
-            IEnumerable<TicketBase> mani = Tickets.Where(x => x.Pattern.Match(name).Success);
-            bool veri = false;
-            LinkedList<TicketBase> diposedTickets = new LinkedList<TicketBase>();
-            foreach (TicketBase ticket in mani)
+            var mani = Tickets.Where(x => x.Pattern.Match(name).Success);
+            var veri = false;
+            var diposedTickets = new LinkedList<TicketBase>();
+            foreach (var ticket in mani)
             {
                 veri = ticket.Verify() || veri; // 不可短路
-                if (!veri)
-                {
-                    diposedTickets.AddLast(ticket);
-                }
+                if (!veri) diposedTickets.AddLast(ticket);
             }
-            foreach (TicketBase ticket in diposedTickets)
-            {
-                Tickets.Remove(ticket);
-            }
+
+            foreach (var ticket in diposedTickets) Tickets.Remove(ticket);
             return veri;
         }
 
@@ -35,15 +30,12 @@ namespace HyperaiShell.App.Models
 
         public void Remove(TicketBase ticket)
         {
-            if (Tickets.Contains(ticket))
-            {
-                Tickets.Remove(ticket);
-            }
+            if (Tickets.Contains(ticket)) Tickets.Remove(ticket);
         }
 
         public TicketBase FindSpecificTicket(string ticketName)
         {
-            return Tickets.Where(x => x.Name == ticketName).FirstOrDefault();
+            return Tickets.FirstOrDefault(x => x.Name == ticketName);
         }
 
         public IEnumerable<TicketBase> GetTickets()

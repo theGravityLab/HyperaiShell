@@ -1,6 +1,6 @@
-﻿using LiteDB;
-using System;
+﻿using System;
 using System.Linq;
+using LiteDB;
 
 namespace HyperaiShell.App.Data
 {
@@ -13,8 +13,8 @@ namespace HyperaiShell.App.Data
 
         public Type GetType(string name)
         {
-            string typeName = name.Substring(0, name.IndexOf(','));
-            string assName = name.Substring(typeName.Length + 1);
+            var typeName = name.Substring(0, name.IndexOf(','));
+            var assName = name.Substring(typeName.Length + 1);
             return AppDomain.CurrentDomain.GetAssemblies().First(x => x.GetName().Name == assName).GetType(typeName);
         }
     }

@@ -1,14 +1,13 @@
-using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace HyperaiShell.App.Logging
 {
     public class ReConsoleLogger : ILogger
     {
-        private readonly string _name;
-        private readonly LogLevel _minmalLevel;
-
         private static readonly object locker = new object();
+        private readonly LogLevel _minmalLevel;
+        private readonly string _name;
 
         public ReConsoleLogger(string name, LogLevel minimalLevel = LogLevel.Debug)
         {
@@ -23,14 +22,15 @@ namespace HyperaiShell.App.Logging
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return (int)logLevel >= (int)_minmalLevel;
+            return (int) logLevel >= (int) _minmalLevel;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+            Func<TState, Exception, string> formatter)
         {
             lock (locker)
             {
-                string levelName = logLevel switch
+                var levelName = logLevel switch
                 {
                     LogLevel.Trace => "TRAC",
                     LogLevel.Debug => "DEBG",
@@ -38,14 +38,14 @@ namespace HyperaiShell.App.Logging
                     LogLevel.Warning => "WARN",
                     LogLevel.Error => "ERRO",
                     LogLevel.Critical => "CRIT",
-                    _ => "NONE",
+                    _ => "NONE"
                 };
                 // [20/07/22 00:11][DEBG]NAME => STHSTH
                 Console.ResetColor();
-                string datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
+                var datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write(datetime);
-                (ConsoleColor, ConsoleColor) color = GetColor(logLevel);
+                var color = GetColor(logLevel);
                 if (color.Item1 != ConsoleColor.Black) Console.BackgroundColor = color.Item1;
                 Console.ForegroundColor = color.Item2;
                 Console.Write($"[{levelName}]");
@@ -67,7 +67,7 @@ namespace HyperaiShell.App.Logging
                 LogLevel.Warning => (ConsoleColor.Black, ConsoleColor.Yellow),
                 LogLevel.Error => (ConsoleColor.Black, ConsoleColor.Red),
                 LogLevel.Critical => (ConsoleColor.Red, ConsoleColor.White),
-                _ => (ConsoleColor.Black, ConsoleColor.Gray),
+                _ => (ConsoleColor.Black, ConsoleColor.Gray)
             };
         }
     }

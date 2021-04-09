@@ -1,6 +1,6 @@
-﻿using HyperaiShell.Foundation.Bots;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using HyperaiShell.Foundation.Bots;
 
 namespace HyperaiShell.App.Bots
 {
@@ -10,18 +10,15 @@ namespace HyperaiShell.App.Bots
 
         IBotBuilder IBotCollectionBuilder.Add<TBot>()
         {
-            BotBuilder builder = new BotBuilder(typeof(TBot));
+            var builder = new BotBuilder(typeof(TBot));
             botBuilders.Add(builder);
             return builder;
         }
 
         public BotCollection Build(IServiceProvider provider)
         {
-            BotCollection collection = new BotCollection();
-            foreach (IBotBuilder builder in botBuilders)
-            {
-                collection.Add(builder.Build(provider));
-            }
+            var collection = new BotCollection();
+            foreach (var builder in botBuilders) collection.Add(builder.Build(provider));
             return collection;
         }
     }

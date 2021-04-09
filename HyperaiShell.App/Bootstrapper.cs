@@ -29,12 +29,12 @@ namespace HyperaiShell.App
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfigurationBuilder cfgBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false);
-            IConfigurationRoot config = cfgBuilder.Build();
+            var cfgBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false);
+            var config = cfgBuilder.Build();
 
-            string dbName = "data/internal.litedb.db";
-            LiteDatabase database = new LiteDatabase(dbName);
-            LiteDbRepository repository = new LiteDbRepository(database);
+            var dbName = "data/internal.litedb.db";
+            var database = new LiteDatabase(dbName);
+            var repository = new LiteDbRepository(database);
 
             services.AddSingleton<IConfiguration>(config);
             services.AddSingleton<IRepository>(repository);
@@ -43,9 +43,9 @@ namespace HyperaiShell.App
                 .AddConfiguration(config)
                 .AddDebug()
                 .AddReConsole()
-                .AddFile("logs/app_{Date}.log", minimumLevel: LogLevel.Information)
+                .AddFile("logs/app_{Date}.log")
                 .SetMinimumLevel(LogLevel.Trace)
-                );
+            );
 
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
             services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
