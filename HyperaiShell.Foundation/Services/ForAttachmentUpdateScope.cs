@@ -3,7 +3,7 @@ using Hyperai.Relations;
 
 namespace HyperaiShell.Foundation.Services
 {
-    public class ForAttachmentUpdateScope<T> : IDisposable
+    public sealed class ForAttachmentUpdateScope<T> : IDisposable
     {
         private readonly T _instance;
         private readonly IAttachmentService _service;
@@ -23,7 +23,7 @@ namespace HyperaiShell.Foundation.Services
             Dispose(true);
         }
 
-        protected virtual void Dispose(bool isDisposing)
+        private void Dispose(bool isDisposing)
         {
             if (!isDisposed && isDisposing)
             {
