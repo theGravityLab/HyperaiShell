@@ -27,7 +27,7 @@ namespace HyperaiShell.App.Middlewares
                 {
                     try
                     {
-                        var msg = _parser.Parse(text[5..^4]);
+                        var msg = _parser.Parse(text[4..^4].Trim());
                         msgEvent.Message = msg;
                     }
                     catch (Exception e)
