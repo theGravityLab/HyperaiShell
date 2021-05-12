@@ -34,12 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Hyperai.Units\Hyperai.Units\Hyperai.Units.csproj" />
     <ProjectReference Include="..\..\Hyperai\Hyperai.Core\Hyperai.Core.csproj" />
     <ProjectReference Include="..\HyperaiShell.Foundation\HyperaiShell.Foundation.csproj" />
