@@ -6,15 +6,15 @@ using HyperaiShell.Foundation.ModelExtensions;
 
 namespace HyperaiShell.Foundation.Authorization.Attributes
 {
-    public class CheckTicketAttribute : FilterByAttribute
+    public class RequiredTicketAttribute : FilterByAttribute
     {
-        private const string MESSAGE = "Permission Denied: ";
+        private const string MESSAGE = "Operation denied: ";
 
         /// <summary>
         ///     检查是否具有某个特定的 <see cref="TicketBase" />
         /// </summary>
         /// <param name="specificName">票据(不含通配符</param>
-        public CheckTicketAttribute(string specificName) : base(new CheckTicketFilter(new[] {specificName}),
+        public RequiredTicketAttribute(string specificName) : base(new CheckTicketFilter(new[] {specificName}),
             MESSAGE + specificName)
         {
         }
@@ -23,7 +23,7 @@ namespace HyperaiShell.Foundation.Authorization.Attributes
         ///     检查是否具有某个特定的 <see cref="TicketBase" />
         /// </summary>
         /// <param name="specificNames">票据(不含通配符)，多组取或</param>
-        public CheckTicketAttribute(params string[] specificNames) : base(new CheckTicketFilter(specificNames),
+        public RequiredTicketAttribute(params string[] specificNames) : base(new CheckTicketFilter(specificNames),
             MESSAGE + string.Join(',', specificNames))
         {
         }
