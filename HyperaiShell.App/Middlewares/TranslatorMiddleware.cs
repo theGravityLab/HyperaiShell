@@ -30,11 +30,10 @@ namespace HyperaiShell.App.Middlewares
                         var msg = _parser.Parse(text[4..^4].Trim());
                         msgEvent.Message = msg;
                     }
-                    catch (Exception e)
+                    catch
                     {
                         // not proper hyper code
                     }
-
                 }
             }
 

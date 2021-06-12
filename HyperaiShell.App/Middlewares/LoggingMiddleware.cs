@@ -1,4 +1,5 @@
 ﻿using Hyperai.Events;
+using Hyperai.Messages;
 using Hyperai.Middlewares;
 using Hyperai.Services;
 using Microsoft.Extensions.Logging;
@@ -19,13 +20,25 @@ namespace HyperaiShell.App.Middlewares
             switch (eventArgs)
             {
                 case GroupMessageEventArgs args:
-                    _logger.LogInformation("GroupMessageEventArgs received {0}:\n{1}=>{2}", args.User.DisplayName,
-                        args.Group.Name, args.Message);
+                    _logger.LogInformation("GroupMessageEventArgs received {0}-{1}:\n{2}", args.Group.Name,
+                        args.User.DisplayName, args.Message.AsReadable().ToString());
                     break;
 
                 case FriendMessageEventArgs args:
                     _logger.LogInformation("FriendMessageEventArgs received {0}:\n{1}", args.User.Nickname,
-                        args.Message);
+                        args.Message.AsReadable().ToString());
+                    break;
+                
+                case GroupMemberMutedEventArgs args:
+                    _logger.LogInformation($"GroupMemberMutedEventArgs received {0}:\n{1} by {2} for {3}", args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName, args.Duration);
+                    break;
+                
+                case GroupMemberJoinedEventArgs args:
+                    _logger.LogInformation($"GroupMemberJoinedEventArgs received {0}:\n{1} by {2}", args.Group.Name, args.Who.DisplayName, args.Operator.DisplayName);
+                    break;
+                
+                case GroupMemberUnmutedEventArgs args:
+                    _logger.LogInformation($"GroupMemberUnmutedEventArgs received {0}:\n{1} by {2}", args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName);
                     break;
 
                 default:

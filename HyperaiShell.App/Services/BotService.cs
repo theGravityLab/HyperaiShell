@@ -45,10 +45,6 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnGroupRecall(_client, groupRecall), self);
                     break;
 
-                case FriendRequestEventArgs friendRequest:
-                    DoForAll(x => x.OnFriendRequest(_client, friendRequest), self);
-                    break;
-
                 case GroupMemberRequestEventArgs groupMemberRequest:
                     DoForAll(x => x.OnMemberRequest(_client, groupMemberRequest), self);
                     break;
@@ -105,6 +101,7 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnInvitationResp(_client, invitationResp), self);
                     break;
             }
+            DoForAll( x=> x.OnEverything(_client, args), self);
         }
 
         private void DoForAll(Action<BotBase> action, Self me)

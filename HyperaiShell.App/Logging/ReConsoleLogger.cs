@@ -42,7 +42,7 @@ namespace HyperaiShell.App.Logging
                 };
                 // [20/07/22 00:11][DEBG]NAME => STHSTH
                 Console.ResetColor();
-                var datetime = DateTime.Now.ToString("[yy/MM/dd HH:mm:ss] ");
+                var datetime = DateTime.Now.ToString("yy/MM/dd HH:mm:ss ");
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write(datetime);
                 var color = GetColor(logLevel);
@@ -50,8 +50,10 @@ namespace HyperaiShell.App.Logging
                 Console.ForegroundColor = color.Item2;
                 Console.Write($"[{levelName}]");
                 Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write($" {_name}");
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($" {_name}({eventId.Id}) =>");
+                Console.WriteLine($"({eventId}) =>");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine(formatter(state, exception));
             }

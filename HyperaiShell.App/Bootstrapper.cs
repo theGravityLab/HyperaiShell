@@ -44,7 +44,6 @@ namespace HyperaiShell.App
                 .AddDebug()
                 .AddReConsole()
                 .AddFile("logs/app_{Date}.log")
-                .SetMinimumLevel(LogLevel.Trace)
             );
 
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));

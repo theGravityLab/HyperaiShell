@@ -23,10 +23,6 @@ namespace HyperaiShell.Foundation.Bots
         {
         }
 
-        public virtual void OnFriendRequest(object sender, FriendRequestEventArgs args)
-        {
-        }
-
         public virtual void OnFriendRequestResp(object sender, FriendRequestResponsedEventArgs args)
         {
         }
