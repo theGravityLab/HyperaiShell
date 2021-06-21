@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace HyperaiShell.App.Logging
 {
+    
+    [Obsolete]
     public class ReConsoleLogger : ILogger
     {
         private static readonly object locker = new object();
@@ -40,7 +42,7 @@ namespace HyperaiShell.App.Logging
                     LogLevel.Critical => "CRIT",
                     _ => "NONE"
                 };
-                // [20/07/22 00:11][DEBG]NAME => STHSTH
+                // 20/07/22 00:11 DEBG NAME => STHSTH
                 Console.ResetColor();
                 var datetime = DateTime.Now.ToString("yy/MM/dd HH:mm:ss ");
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -48,12 +50,10 @@ namespace HyperaiShell.App.Logging
                 var color = GetColor(logLevel);
                 if (color.Item1 != ConsoleColor.Black) Console.BackgroundColor = color.Item1;
                 Console.ForegroundColor = color.Item2;
-                Console.Write($"[{levelName}]");
+                Console.Write($"{levelName}");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.Write($" {_name}");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"({eventId}) =>");
+                Console.Write($" {(_name.Contains('.') ? _name.Substring(_name.LastIndexOf('.') + 1) : _name)} ");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine(formatter(state, exception));
             }

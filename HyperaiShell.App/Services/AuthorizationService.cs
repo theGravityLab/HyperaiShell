@@ -23,10 +23,7 @@ namespace HyperaiShell.App.Services
             if (specificName == "whosyourdaddy" && _daddy != null && _daddy == model.Identity.ToString()) return true;
 
             var ticketBox = model.Retrieve<TicketBox>();
-            if (ticketBox == null)
-            {
-                return false;
-            }
+            if (ticketBox == null) return false;
 
             var pass = ticketBox.Check(specificName);
             model.Attach(ticketBox);

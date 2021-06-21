@@ -101,7 +101,8 @@ namespace HyperaiShell.App.Services
                     DoForAll(x => x.OnInvitationResp(_client, invitationResp), self);
                     break;
             }
-            DoForAll( x=> x.OnEverything(_client, args), self);
+
+            DoForAll(x => x.OnEverything(_client, args), self);
         }
 
         private void DoForAll(Action<BotBase> action, Self me)

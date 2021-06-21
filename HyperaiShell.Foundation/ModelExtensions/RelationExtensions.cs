@@ -30,25 +30,25 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        ///     监听该 <see cref="Group"/> 的下一条消息
+        ///     监听该 <see cref="Group" /> 的下一条消息
         /// </summary>
         /// <param name="group">目标群</param>
         /// <param name="action">当消息抵达时的操作</param>
         /// <param name="msToExpire">过期时间(ms)</param>
         public static void Await(this Group group, ActionDelegate action, int msToExpire = 3000)
         {
-            unit.WaitOne(Channel.CreateMatchingGroup(group.Identity), action, TimeSpan.FromMilliseconds(msToExpire));
+            unit.WaitOne(Signature.FromGroup(group.Identity), action, TimeSpan.FromMilliseconds(msToExpire));
         }
 
         /// <summary>
-        ///     监听该 <see cref="Member"/> 的下一条消息
+        ///     监听该 <see cref="Member" /> 的下一条消息
         /// </summary>
         /// <param name="member">目标成员</param>
         /// <param name="action">当消息抵达时的操作</param>
         /// <param name="msToExpire">过期时间(ms)</param>
         public static void Await(this Member member, ActionDelegate action, int msToExpire = 3000)
         {
-            unit.WaitOne(Channel.Create(member.Identity, member.Group.Value.Identity), action,
+            unit.WaitOne(Signature.FromMember(member.Group.Value.Identity,member.Identity), action,
                 TimeSpan.FromMilliseconds(msToExpire));
         }
     }

@@ -3,19 +3,23 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Hyperai;
+using Hyperai.Services;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.Foundation;
+using HyperaiShell.Foundation.Plugins;
 using HyperaiShell.Foundation.Services;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace HyperaiShell.App
 {
-    public static class Program
+    public class Program
     {
         private static ILogger _logger;
 
@@ -37,15 +41,25 @@ namespace HyperaiShell.App
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-            var app = new HyperaiApplicationBuilder();
+            var appBuilder = new HyperaiApplicationBuilder();
 
-            app.UseStartup<Bootstrapper>();
+            appBuilder.UseStartup<Bootstrapper>();
             LoadPackages().Wait();
-            SearchConfigurePluginServices(app);
-            Shared.Application = app.Build();
-            _logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>().CreateLogger("Program");
+            SearchConfigurePluginServices(appBuilder);
+            Shared.Application = appBuilder.Build();
+            _logger = Shared.Application.Provider.GetRequiredService<ILogger<Program>>();
+            PrintAssemblyInfo();
             ConfigurePlugins(Shared.Application);
             Shared.Application.Run();
+        }
+
+        private static void PrintAssemblyInfo()
+        {
+            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{HyperaiShellV} (Plugin based on v{HyperaiShellFoundationV})\nHyperai v{HyperaiV}\nHyperai.Units v{HyperaiUnitsV}",
+                typeof(Program).Assembly.GetName().Version, 
+                typeof(PluginBase).Assembly.GetName().Version,
+                typeof(IApiClient).Assembly.GetName().Version,
+                typeof(UnitService).Assembly.GetName().Version);
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -60,7 +74,7 @@ namespace HyperaiShell.App
             var exception = (Exception) e.ExceptionObject;
             if (e.IsTerminating)
             {
-                _logger.LogCritical(exception, "Terminating for exception uncaught.");
+                _logger.LogCritical(exception, "Terminating for uncaught exception.");
                 Environment.ExitCode = -1;
             }
             else
@@ -105,7 +119,7 @@ namespace HyperaiShell.App
                 var plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder, config);
                 plugin.PostConfigure(config);
-                _logger.LogInformation("Plugin ({}) activated.", plugin.Context.Meta.Identity);
+                _logger.LogInformation("Plugin {Version} activated.", plugin.Context.Meta.Identity);
             }
         }
     }

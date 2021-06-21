@@ -49,10 +49,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
             if (t != null) return t;
 
             t = generator();
-            if (t == null)
-            {
-                return default;
-            }
+            if (t == null) return default;
 
             service.Attach(t, model);
             return t;

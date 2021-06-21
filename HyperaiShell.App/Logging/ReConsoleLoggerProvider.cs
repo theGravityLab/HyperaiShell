@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 
 namespace HyperaiShell.App.Logging
 {
+    
+    [Obsolete]
     public class ReConsoleLoggerProvider : ILoggerProvider
     {
         private readonly ReConsoleLoggerOptions _options;
@@ -15,7 +18,7 @@ namespace HyperaiShell.App.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return loggers.GetOrAdd(categoryName, name => new ReConsoleLogger(categoryName, _options.MinmalLevel));
+            return loggers.GetOrAdd(categoryName, name => new ReConsoleLogger(name, _options.MinmalLevel));
         }
 
         public void Dispose()

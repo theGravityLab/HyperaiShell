@@ -17,30 +17,34 @@ namespace HyperaiShell.Foundation.ModelExtensions
         {
             _client = Shared.Application.Provider.GetRequiredService<IApiClient>();
             _logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>()
-                .CreateLogger("HyperaiShell.Foundation.ModelExtensions.ClientExtensions");
+                .CreateLogger(typeof(ClientExtensions).AssemblyQualifiedName);
         }
 
         public static async Task SendAsync(this Friend friend, MessageChain message)
         {
-            _logger.LogInformation($"{_client.GetType().Name}(Friend) < {friend.Identifier} : {message}");
+            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Friend), friend.Identifier,
+                message);
             await _client.SendFriendMessageAsync(friend, message);
         }
 
         public static async Task SendPlainAsync(this Friend friend, string plain)
         {
-            _logger.LogInformation($"{_client.GetType().Name}(Friend) < {friend.Identifier} : {plain}");
+            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Friend), friend.Identifier,
+                plain);
             await _client.SendFriendMessageAsync(friend, new MessageChain(new MessageElement[] {new Plain(plain)}));
         }
 
         public static async Task SendAsync(this Group group, MessageChain message)
         {
-            _logger.LogInformation($"{_client.GetType().Name}(Group) < {group.Identifier} : {message}");
+            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Group), group.Identifier,
+                message);
             await _client.SendGroupMessageAsync(group, message);
         }
 
         public static async Task SendPlainAsync(this Group group, string plain)
         {
-            _logger.LogInformation($"{_client.GetType().Name}(Group) < {group.Identifier} : {plain}");
+            _logger.LogInformation("{0}(1) < {2}:\n{3}", _client.GetType().Name, nameof(Group), group.Identifier,
+                plain);
             await _client.SendGroupMessageAsync(group, new MessageChain(new MessageElement[] {new Plain(plain)}));
         }
     }

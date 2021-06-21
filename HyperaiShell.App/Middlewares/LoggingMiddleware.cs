@@ -1,5 +1,4 @@
 ﻿using Hyperai.Events;
-using Hyperai.Messages;
 using Hyperai.Middlewares;
 using Hyperai.Services;
 using Microsoft.Extensions.Logging;
@@ -20,25 +19,28 @@ namespace HyperaiShell.App.Middlewares
             switch (eventArgs)
             {
                 case GroupMessageEventArgs args:
-                    _logger.LogInformation("GroupMessageEventArgs received {0}-{1}:\n{2}", args.Group.Name,
-                        args.User.DisplayName, args.Message.AsReadable().ToString());
+                    _logger.LogInformation("{0} received {1}-{2}:\n{3}", args.GetType().Name, args.Group.Name,
+                        args.User.DisplayName, args.Message);
                     break;
 
                 case FriendMessageEventArgs args:
-                    _logger.LogInformation("FriendMessageEventArgs received {0}:\n{1}", args.User.Nickname,
-                        args.Message.AsReadable().ToString());
+                    _logger.LogInformation("{0} received {1}:\n{2}", args.GetType().Name, args.User.Nickname,
+                        args.Message);
                     break;
-                
+
                 case GroupMemberMutedEventArgs args:
-                    _logger.LogInformation($"GroupMemberMutedEventArgs received {0}:\n{1} by {2} for {3}", args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName, args.Duration);
+                    _logger.LogInformation("{0} received {1}:\n{2} by {3} for {4}", args.GetType().Name,
+                        args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName, args.Duration);
                     break;
-                
+
                 case GroupMemberJoinedEventArgs args:
-                    _logger.LogInformation($"GroupMemberJoinedEventArgs received {0}:\n{1} by {2}", args.Group.Name, args.Who.DisplayName, args.Operator.DisplayName);
+                    _logger.LogInformation("{0} received {1}:\n{2} by {3}", args.GetType().Name, args.Group.Name,
+                        args.Who.DisplayName, args.Operator.DisplayName);
                     break;
-                
+
                 case GroupMemberUnmutedEventArgs args:
-                    _logger.LogInformation($"GroupMemberUnmutedEventArgs received {0}:\n{1} by {2}", args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName);
+                    _logger.LogInformation("{0} received {1}:\n{2} by {3}", args.GetType().Name, args.Group.Name,
+                        args.Whom.DisplayName, args.Operator.DisplayName);
                     break;
 
                 default:

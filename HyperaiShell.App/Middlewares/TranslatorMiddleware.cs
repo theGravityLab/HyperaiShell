@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Hyperai.Events;
 using Hyperai.Messages;
 using Hyperai.Messages.ConcreteModels;
@@ -24,7 +23,6 @@ namespace HyperaiShell.App.Middlewares
                 var text = string.Join(string.Empty, msgEvent.Message.OfType<Plain>().Select(x => x.Text));
                 if (text.Length > 8 && (text.StartsWith("```\r") || text.StartsWith("```\n")) &&
                     (text.EndsWith("\r```") || text.EndsWith("\n```")))
-                {
                     try
                     {
                         var msg = _parser.Parse(text[4..^4].Trim());
@@ -34,7 +32,6 @@ namespace HyperaiShell.App.Middlewares
                     {
                         // not proper hyper code
                     }
-                }
             }
 
             return true;
