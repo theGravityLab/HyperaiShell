@@ -55,7 +55,7 @@ namespace HyperaiShell.App
 
         private static void PrintAssemblyInfo()
         {
-            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{HyperaiShellV} (Plugin based on v{HyperaiShellFoundationV})\nHyperai v{HyperaiV}\nHyperai.Units v{HyperaiUnitsV}",
+            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{} (Plugin based on v{})\nHyperai v{}\nHyperai.Units v{}",
                 typeof(Program).Assembly.GetName().Version, 
                 typeof(PluginBase).Assembly.GetName().Version,
                 typeof(IApiClient).Assembly.GetName().Version,
@@ -110,7 +110,6 @@ namespace HyperaiShell.App
         /// </summary>
         private static void ConfigurePlugins(IHyperaiApplication app)
         {
-            // NOTE: search all units here
             app.Provider.GetRequiredService<IUnitService>().SearchForUnits();
             var service = app.Provider.GetRequiredService<IBotService>();
             var config = app.Provider.GetRequiredService<IConfiguration>();
@@ -119,7 +118,7 @@ namespace HyperaiShell.App
                 var plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder, config);
                 plugin.PostConfigure(config);
-                _logger.LogInformation("Plugin {Version} activated.", plugin.Context.Meta.Identity);
+                _logger.LogInformation("Plugin {} activated.", plugin.Context.Meta.Identity);
             }
         }
     }

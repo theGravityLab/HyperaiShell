@@ -20,30 +20,50 @@ namespace HyperaiShell.Foundation.ModelExtensions
                 .CreateLogger(typeof(ClientExtensions).AssemblyQualifiedName);
         }
 
+        /// <summary>
+        /// 使用默认 <see cref="IApiClient"/> 发送 <see cref="MessageChain"/>
+        /// </summary>
+        /// <param name="friend">好友</param>
+        /// <param name="message">消息链</param>
         public static async Task SendAsync(this Friend friend, MessageChain message)
         {
-            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Friend), friend.Identifier,
+            _logger.LogInformation("{}({}) < {}:\n{}", _client.GetType(), nameof(Friend), friend.Identifier,
                 message);
             await _client.SendFriendMessageAsync(friend, message);
         }
 
+        /// <summary>
+        /// 使用默认 <see cref="IApiClient"/> 发送 <see cref="string"/> 构成的 <see cref="MessageChain"/>
+        /// </summary>
+        /// <param name="friend">好友</param>
+        /// <param name="plain">消息串</param>
         public static async Task SendPlainAsync(this Friend friend, string plain)
         {
-            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Friend), friend.Identifier,
+            _logger.LogInformation("{}({}) < {}:\n{}", _client.GetType(), nameof(Friend), friend.Identifier,
                 plain);
             await _client.SendFriendMessageAsync(friend, new MessageChain(new MessageElement[] {new Plain(plain)}));
         }
 
+        /// <summary>
+        /// 使用默认 <see cref="IApiClient"/> 发送 <see cref="MessageChain"/>
+        /// </summary>
+        /// <param name="group">群</param>
+        /// <param name="message">消息链</param>
         public static async Task SendAsync(this Group group, MessageChain message)
         {
-            _logger.LogInformation("{0}({1}) < {2}:\n{3}", _client.GetType().Name, nameof(Group), group.Identifier,
+            _logger.LogInformation("{}({}) < {}:\n{}", _client.GetType(), nameof(Group), group.Identifier,
                 message);
             await _client.SendGroupMessageAsync(group, message);
         }
 
+        /// <summary>
+        /// 使用默认 <see cref="IApiClient"/> 发送 <see cref="string"/> 构成的 <see cref="MessageChain"/>
+        /// </summary>
+        /// <param name="group">群</param>
+        /// <param name="plain">消息串</param>
         public static async Task SendPlainAsync(this Group group, string plain)
         {
-            _logger.LogInformation("{0}(1) < {2}:\n{3}", _client.GetType().Name, nameof(Group), group.Identifier,
+            _logger.LogInformation("{}({}) < {}:\n{}", _client.GetType(), nameof(Group), group.Identifier,
                 plain);
             await _client.SendGroupMessageAsync(group, new MessageChain(new MessageElement[] {new Plain(plain)}));
         }

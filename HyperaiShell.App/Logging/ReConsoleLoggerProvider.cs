@@ -18,7 +18,7 @@ namespace HyperaiShell.App.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return loggers.GetOrAdd(categoryName, name => new ReConsoleLogger(name, _options.MinmalLevel));
+            return loggers.GetOrAdd(categoryName, name => new ReConsoleLogger(name, _options.MinimalLevel));
         }
 
         public void Dispose()

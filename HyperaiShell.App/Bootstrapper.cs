@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ac682.Extensions.Logging.Console;
+using Ac682.Extensions.Logging.Console.Formatters;
 using Hyperai;
 using Hyperai.Messages;
 using Hyperai.Serialization;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
+using HyperaiShell.App.Logging.ConsoleFormatters;
 using HyperaiShell.App.Middlewares;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.App.Services;
@@ -145,20 +148,14 @@ namespace HyperaiShell.App
                     }
                 };
 
-            var customTheme = new SystemConsoleTheme(customThemeStyles);
-
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .Enrich.WithAssemblyVersion()
-                .Enrich.WithAssemblyName()
-                .MinimumLevel.Information()
-                .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} {Level:u3} {Message:lj}{NewLine}{Exception}", theme: customTheme)
-                .CreateLogger();
-
             services.AddLogging(options => options
-                .AddConfiguration(config)
-                //.AddReConsole()
-                .AddSerilog()
+                .AddConsole(c => c
+                    .SetMinimalLevel(LogLevel.Information)
+                    .AddBuiltinFormatters()
+                    .AddFormatter<MessageElementFormatter>()
+                    .AddFormatter<RelationFormatter>()
+                    .AddFormatter<EventArgsFormatter>()
+                )
                 .AddFile("logs/app_{Date}.log")
             );
 

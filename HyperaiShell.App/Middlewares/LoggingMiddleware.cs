@@ -19,32 +19,32 @@ namespace HyperaiShell.App.Middlewares
             switch (eventArgs)
             {
                 case GroupMessageEventArgs args:
-                    _logger.LogInformation("{0} received {1}-{2}:\n{3}", args.GetType().Name, args.Group.Name,
-                        args.User.DisplayName, args.Message);
+                    _logger.LogInformation("{} received {}-{}:\n{}", args, args.Group,
+                        args.User, args.Message);
                     break;
 
                 case FriendMessageEventArgs args:
-                    _logger.LogInformation("{0} received {1}:\n{2}", args.GetType().Name, args.User.Nickname,
+                    _logger.LogInformation("{} received {}:\n{}", args, args.User,
                         args.Message);
                     break;
 
                 case GroupMemberMutedEventArgs args:
-                    _logger.LogInformation("{0} received {1}:\n{2} by {3} for {4}", args.GetType().Name,
-                        args.Group.Name, args.Whom.DisplayName, args.Operator.DisplayName, args.Duration);
+                    _logger.LogInformation("{} received {}:\n{} by {} for {}", args,
+                        args.Group, args.Whom, args.Operator, args.Duration);
                     break;
 
                 case GroupMemberJoinedEventArgs args:
-                    _logger.LogInformation("{0} received {1}:\n{2} by {3}", args.GetType().Name, args.Group.Name,
-                        args.Who.DisplayName, args.Operator.DisplayName);
+                    _logger.LogInformation("{} received {}:\n{} by {}", args, args.Group,
+                        args.Who, args.Operator);
                     break;
 
                 case GroupMemberUnmutedEventArgs args:
-                    _logger.LogInformation("{0} received {1}:\n{2} by {3}", args.GetType().Name, args.Group.Name,
-                        args.Whom.DisplayName, args.Operator.DisplayName);
+                    _logger.LogInformation("{} received {}:\n{} by {}", args, args.Group,
+                        args.Whom, args.Operator);
                     break;
 
                 default:
-                    _logger.LogInformation("{0} received at {1}", eventArgs.GetType().Name, eventArgs.Time);
+                    _logger.LogInformation("{} received at {}", eventArgs, eventArgs.Time);
                     break;
             }
 

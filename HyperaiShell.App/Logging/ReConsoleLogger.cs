@@ -8,13 +8,13 @@ namespace HyperaiShell.App.Logging
     public class ReConsoleLogger : ILogger
     {
         private static readonly object locker = new object();
-        private readonly LogLevel _minmalLevel;
+        private readonly LogLevel _minimalLevel;
         private readonly string _name;
 
         public ReConsoleLogger(string name, LogLevel minimalLevel = LogLevel.Debug)
         {
             _name = name;
-            _minmalLevel = minimalLevel;
+            _minimalLevel = minimalLevel;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -24,7 +24,7 @@ namespace HyperaiShell.App.Logging
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return (int) logLevel >= (int) _minmalLevel;
+            return (int) logLevel >= (int) _minimalLevel;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
