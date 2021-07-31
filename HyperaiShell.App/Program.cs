@@ -118,7 +118,7 @@ namespace HyperaiShell.App
                 var plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder, config);
                 plugin.PostConfigure(config);
-                _logger.LogInformation("Plugin {} activated.", plugin.Context.Meta.Identity);
+                _logger.LogInformation("Plugin {} activated", plugin.Context.Meta.Identity);
             }
         }
     }

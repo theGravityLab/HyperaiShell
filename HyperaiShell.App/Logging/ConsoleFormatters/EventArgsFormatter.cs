@@ -12,7 +12,7 @@ namespace HyperaiShell.App.Logging.ConsoleFormatters
             return type.IsAssignableTo(typeof(GenericEventArgs));
         }
 
-        public IEnumerable<ColoredUnit> Format(object obj, Type type)
+        public IEnumerable<ColoredUnit> Format(object obj, Type type, string format = null)
         {
             return new[]
             {

@@ -23,7 +23,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         /// <param name="group">目标群</param>
         /// <param name="identity">TA滴 id</param>
         /// <returns>完整的群员信息</returns>
-        public static Member GetMemebr(this Group group, long identity)
+        public static Member GetMember(this Group group, long identity)
         {
             return client.RequestAsync(new Member {Identity = identity, Group = new Lazy<Group>(group)}).GetAwaiter()
                 .GetResult();

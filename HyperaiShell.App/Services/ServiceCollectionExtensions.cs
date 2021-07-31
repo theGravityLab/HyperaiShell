@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Ac682.Extensions.Logging.Console;
 using Hangfire;
+using Hangfire.Common;
 using Hangfire.Storage.SQLite;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace HyperaiShell.App.Services
 {
@@ -13,7 +16,7 @@ namespace HyperaiShell.App.Services
     {
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
         {
-            var profileName = configuration["Application:SelectedClientName"];
+            var profileName = configuration["Application:SelectedProfile"];
             var profile = configuration
                 .GetSection("Clients")
                 .GetChildren()
@@ -51,10 +54,9 @@ namespace HyperaiShell.App.Services
             return services;
         }
 
-        public static IServiceCollection AddHangfire(this IServiceCollection services)
+        public static IServiceCollection AddHangfire(this IServiceCollection services, Action<IGlobalConfiguration> configure)
         {
-            GlobalConfiguration.Configuration.UseSerilogLogProvider();
-            GlobalConfiguration.Configuration.UseSQLiteStorage("data/hangfire.sqlite.db");
+            configure(GlobalConfiguration.Configuration);
             return services;
         }
     }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using Ac682.Extensions.Logging.Console;
 using Ac682.Extensions.Logging.Console.Formatters;
+using Hangfire;
+using Hangfire.Common;
+using Hangfire.Storage.SQLite;
 using Hyperai;
 using Hyperai.Messages;
 using Hyperai.Serialization;
@@ -17,8 +20,7 @@ using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
+using Newtonsoft.Json;
 
 namespace HyperaiShell.App
 {
@@ -35,7 +37,7 @@ namespace HyperaiShell.App
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var cfgBuilder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false);
+            var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
             var config = cfgBuilder.Build();
 
             var dbName = "data/internal.litedb.db";
@@ -45,108 +47,6 @@ namespace HyperaiShell.App
             services.AddSingleton<IConfiguration>(config);
             services.AddSingleton<IRepository>(repository);
 
-            var customThemeStyles =
-                new Dictionary<ConsoleThemeStyle, SystemConsoleThemeStyle>
-                {
-                    {
-                        ConsoleThemeStyle.Text, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.White
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.SecondaryText, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Gray
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.TertiaryText, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.DarkGray
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelVerbose, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Gray
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelDebug, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.DarkMagenta
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelInformation, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Green
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelWarning, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Yellow
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelError, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Black,
-                            Background = ConsoleColor.Red
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.LevelFatal, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.White,
-                            Background = ConsoleColor.Red
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.String, new SystemConsoleThemeStyle
-                        {
-                            Foreground = ConsoleColor.Blue
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Boolean, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.Blue
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Null, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.Blue
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Invalid, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.DarkMagenta
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Number, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.DarkYellow
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Scalar, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.DarkYellow
-                        }
-                    },
-                    {
-                        ConsoleThemeStyle.Name, new SystemConsoleThemeStyle()
-                        {
-                            Foreground = ConsoleColor.DarkCyan
-                        }
-                    }
-                };
 
             services.AddLogging(options => options
                 .AddConsole(c => c
@@ -158,12 +58,24 @@ namespace HyperaiShell.App
                 )
                 .AddFile("logs/app_{Date}.log")
             );
-
+            
+            var settings = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.All
+            };
+            
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
             services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
             services.AddScoped<IMessageChainFormatter, HyperCodeFormatter>();
             services.AddScoped<IMessageChainParser, HyperCodeParser>();
-            services.AddHangfire();
+            services.AddHangfire(configure => configure
+                .UseColouredConsoleLogProvider()
+                .UseSerializerSettings(settings)
+                .UseDefaultActivator()
+                .UseSQLiteStorage("data/hangfire.sqlite.db"));
+            JobHelper.SetSerializerSettings(settings); //TODO: 这个 hangfire 说是会弃用该方法，实际上没有！对应方法反而无效
             services.AddDistributedMemoryCache();
             services.AddBots();
             services.AddClients(config);

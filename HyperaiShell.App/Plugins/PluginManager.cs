@@ -83,12 +83,12 @@ namespace HyperaiShell.App.Plugins
                         }
                 }
 
-                var configFile = Path.Combine(meta.SpaceDirectory, "config.json");
+                var configFile = Path.Combine(meta.SpaceDirectory, "config.toml");
                 if (File.Exists(configFile))
                     context.Configuration = new Lazy<IConfiguration>(() =>
                     {
                         var builder = new ConfigurationBuilder();
-                        builder.AddJsonFile(configFile);
+                        builder.AddTomlFile(configFile);
                         return builder.Build();
                     });
                 else

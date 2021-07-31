@@ -60,12 +60,13 @@ namespace HyperaiShell.Foundation.ModelExtensions
         /// 使用默认 <see cref="IApiClient"/> 发送 <see cref="string"/> 构成的 <see cref="MessageChain"/>
         /// </summary>
         /// <param name="group">群</param>
-        /// <param name="plain">消息串</param>
-        public static async Task SendPlainAsync(this Group group, string plain)
+        /// <param name="plain">消息串或 format</param>
+        /// <param name="args">当用于 format 时所使用的参数</param>
+        public static async Task SendPlainAsync(this Group group, string plain, params  object[] args)
         {
             _logger.LogInformation("{}({}) < {}:\n{}", _client.GetType(), nameof(Group), group.Identifier,
                 plain);
-            await _client.SendGroupMessageAsync(group, new MessageChain(new MessageElement[] {new Plain(plain)}));
+            await _client.SendGroupMessageAsync(group, MessageChain.Construct(new Plain(string.Format(plain, args))));
         }
     }
 }
