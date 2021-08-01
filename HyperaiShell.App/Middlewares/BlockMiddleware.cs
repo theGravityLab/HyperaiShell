@@ -25,8 +25,7 @@ namespace HyperaiShell.App.Middlewares
                 {
                     var banned = _service.IsBanned(friendMessage.User.Identity, out var reason);
                     if (banned)
-                        _logger.LogInformation("Message rejected ({}) for {}", friendMessage.Message.ToString(),
-                            reason);
+                        _logger.LogInformation("Message rejected ({FriendId}) for {Reason}", friendMessage.User.Identity, reason);
 
                     return !banned;
                 }
@@ -34,8 +33,7 @@ namespace HyperaiShell.App.Middlewares
                 {
                     var banned = _service.IsBanned(groupMessage.User.Identity, out var reason);
                     if (banned)
-                        _logger.LogInformation("Message rejected: ({}) for {}", groupMessage.Message.ToString(),
-                            reason);
+                        _logger.LogInformation("Message rejected: ({GroupId}) for {Reason}", groupMessage.Group.Identity, reason);
 
                     return !banned;
                 }

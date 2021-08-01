@@ -119,7 +119,7 @@ namespace HyperaiShell.App.Services
                 await task;
                 if (task.IsFaulted)
                 {
-                    _logger.LogError(task.Exception,"Bot({}) action({}) exited unsuccessfully", bot.GetType().Name, action.Method.Name);
+                    _logger.LogError(task.Exception,"Bot({BotType}) action({ActionName}) exited unsuccessfully", bot.GetType().Name, action.Method.Name);
                 }
             }
         }

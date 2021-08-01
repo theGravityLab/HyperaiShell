@@ -55,7 +55,14 @@ namespace HyperaiShell.App
 
         private static void PrintAssemblyInfo()
         {
-            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{} (Plugin based on v{})\nHyperai v{}\nHyperai.Units v{}",
+            _logger.LogInformation(@"
+ ____            _ _   _                            _ 
+|  _ \ _ __ ___ (_) | | |_   _ _ __   ___ _ __ __ _(_)
+| |_) | '__/ _ \| | |_| | | | | '_ \ / _ \ '__/ _` | |
+|  __/| | | (_) | |  _  | |_| | |_) |  __/ | | (_| | |
+|_|   |_|  \___// |_| |_|\__, | .__/ \___|_|  \__,_|_|
+              |__/       |___/|_|                     ");
+            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{HyperaiShellV} (Plugin based on v{PluginBaseV})\nHyperai v{HyperaiV}\nHyperai.Units v{HyperaiUnitsV}",
                 typeof(Program).Assembly.GetName().Version, 
                 typeof(PluginBase).Assembly.GetName().Version,
                 typeof(IApiClient).Assembly.GetName().Version,
@@ -118,7 +125,7 @@ namespace HyperaiShell.App
                 var plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder, config);
                 plugin.PostConfigure(config);
-                _logger.LogInformation("Plugin {} activated", plugin.Context.Meta.Identity);
+                _logger.LogInformation("Plugin {PluginIdentity} activated", plugin.Context.Meta.Identity);
             }
         }
     }
