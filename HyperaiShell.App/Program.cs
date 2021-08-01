@@ -70,10 +70,7 @@ namespace HyperaiShell.App
             PrintAssemblyInfo();
             ConfigurePlugins(Shared.Host);
             var task = Shared.Host.RunAsync();
-            //test
-            new Friend() {Identity = 2419328026}.SendPlainAsync("Start Test");
-
-            BackgroundJob.Enqueue(() => new Friend() {Identity = 2419328026}.SendAsync(MessageChain.Construct(new Plain("Hello"))));
+            //TEST HERE
             task.Wait();
         }
 
