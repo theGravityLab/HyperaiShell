@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>HyperaiShell.Foundation</PackageId>
-    <Version>2021.8.1</Version>
+    <Version>2021.8.2</Version>
     <Authors>GravityLab</Authors>
     <Company>Unicore</Company>
     <PackageDescription>Basics for HyperShell plugins</PackageDescription>
@@ -23,5 +23,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Hyperai.Units\Hyperai.Units.Abstractions\Hyperai.Units.Abstractions.csproj" />
     <ProjectReference Include="..\..\Hyperai\Hyperai.Abstractions\Hyperai.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.8\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

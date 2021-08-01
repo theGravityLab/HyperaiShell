@@ -10,7 +10,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static BlacklsitExtensions()
         {
-            service = Shared.Application.Provider.GetRequiredService<IBlockService>();
+            service = Shared.Host.Services.GetRequiredService<IBlockService>();
         }
 
         /// <summary>

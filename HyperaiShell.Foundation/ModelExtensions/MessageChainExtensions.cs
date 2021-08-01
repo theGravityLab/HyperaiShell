@@ -15,9 +15,9 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static MessageChainExtensions()
         {
-            _formatter = Shared.Application.Provider.GetRequiredService<IMessageChainFormatter>();
-            _parser = Shared.Application.Provider.GetRequiredService<IMessageChainParser>();
-            _client = Shared.Application.Provider.GetRequiredService<IApiClient>();
+            _formatter = Shared.Host.Services.GetRequiredService<IMessageChainFormatter>();
+            _parser = Shared.Host.Services.GetRequiredService<IMessageChainParser>();
+            _client = Shared.Host.Services.GetRequiredService<IApiClient>();
         }
 
         /// <summary>

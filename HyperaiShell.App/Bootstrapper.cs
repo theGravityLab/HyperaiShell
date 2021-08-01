@@ -10,6 +10,8 @@ using Hyperai.Messages;
 using Hyperai.Serialization;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
+using HyperaiShell.App.Hangfire.Logging;
+using HyperaiShell.App.Logging;
 using HyperaiShell.App.Logging.ConsoleFormatters;
 using HyperaiShell.App.Middlewares;
 using HyperaiShell.App.Plugins;
@@ -24,17 +26,8 @@ using Newtonsoft.Json;
 
 namespace HyperaiShell.App
 {
-    public class Bootstrapper : IHyperaiApplicationBuilderStartup
+    public class Bootstrapper
     {
-        public void ConfigureMiddlewares(IHyperaiApplicationBuilder app)
-        {
-            app.UseLogging();
-            app.UseBlacklist();
-            app.UseTranslator();
-            app.UseBots();
-            app.UseUnits();
-        }
-
         public void ConfigureServices(IServiceCollection services)
         {
             var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
@@ -58,31 +51,39 @@ namespace HyperaiShell.App
                 )
                 .AddFile("logs/app_{Date}.log")
             );
-            
+
             var settings = new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.All,
             };
+            JsonConvert.DefaultSettings = () => settings;
             
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
             services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
             services.AddScoped<IMessageChainFormatter, HyperCodeFormatter>();
             services.AddScoped<IMessageChainParser, HyperCodeParser>();
             services.AddHangfire(configure => configure
-                .UseColouredConsoleLogProvider()
-                .UseSerializerSettings(settings)
-                .UseDefaultActivator()
+                .UseSerializerSettings(settings) //TODO: 没用！
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseLogProvider(new HangfireLogProvider())
                 .UseSQLiteStorage("data/hangfire.sqlite.db"));
-            JobHelper.SetSerializerSettings(settings); //TODO: 这个 hangfire 说是会弃用该方法，实际上没有！对应方法反而无效
+            services.AddHangfireServer();
             services.AddDistributedMemoryCache();
             services.AddBots();
             services.AddClients(config);
             services.AddUnits();
             services.AddAttachments();
-            services.AddAuthorization();
+            services.AddAuthorizationService();
             services.AddBlacklist();
+
+            services.AddHyperaiServer(options => options
+                    .UseLogging()
+                    .UseBlacklist()
+                    .UseTranslator()
+                    .UseBots()
+                    .UseUnits());
         }
     }
 }

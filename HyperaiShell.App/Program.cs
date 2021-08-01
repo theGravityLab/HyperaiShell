@@ -2,18 +2,25 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using Hyperai;
+using Hyperai.Messages;
+using Hyperai.Messages.ConcreteModels;
+using Hyperai.Relations;
 using Hyperai.Services;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.Foundation;
+using HyperaiShell.Foundation.ModelExtensions;
 using HyperaiShell.Foundation.Plugins;
 using HyperaiShell.Foundation.Services;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -26,7 +33,6 @@ namespace HyperaiShell.App
         private static void Main()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Console.CancelKeyPress += Console_CancelKeyPress;
 
             BsonMapper.Global = new BsonMapper(null, new AssemblyNameTypeNameBinder());
 
@@ -41,16 +47,34 @@ namespace HyperaiShell.App
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-            var appBuilder = new HyperaiApplicationBuilder();
+            // var appBuilder = new HyperaiApplicationBuilder();
+            //
+            // appBuilder.UseStartup<Bootstrapper>();
+            // LoadPackagesAsync().Wait();
+            // SearchConfigurePluginServices(appBuilder);
+            // Shared.Application = appBuilder.Build();
+            // _logger = Shared.Application.Provider.GetRequiredService<ILogger<Program>>();
+            // PrintAssemblyInfo();
+            // ConfigurePlugins(Shared.Application);
+            // Shared.Application.Run();
 
-            appBuilder.UseStartup<Bootstrapper>();
-            LoadPackages().Wait();
-            SearchConfigurePluginServices(appBuilder);
-            Shared.Application = appBuilder.Build();
-            _logger = Shared.Application.Provider.GetRequiredService<ILogger<Program>>();
+            var startup = new Bootstrapper();
+            var hostBuilder = new HostBuilder()
+                .ConfigureServices(startup.ConfigureServices)
+                .UseConsoleLifetime();
+
+            LoadPackagesAsync().Wait();
+            SearchConfigurePluginServices(hostBuilder);
+            Shared.Host = hostBuilder.Build();
+            _logger = Shared.Host.Services.GetRequiredService<ILogger<Program>>();
             PrintAssemblyInfo();
-            ConfigurePlugins(Shared.Application);
-            Shared.Application.Run();
+            ConfigurePlugins(Shared.Host);
+            var task = Shared.Host.RunAsync();
+            //test
+            new Friend() {Identity = 2419328026}.SendPlainAsync("Start Test");
+
+            BackgroundJob.Enqueue(() => new Friend() {Identity = 2419328026}.SendAsync(MessageChain.Construct(new Plain("Hello"))));
+            task.Wait();
         }
 
         private static void PrintAssemblyInfo()
@@ -69,31 +93,24 @@ namespace HyperaiShell.App
                 typeof(UnitService).Assembly.GetName().Version);
         }
 
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            _logger.LogInformation("Shutting down...");
-            Shared.Application.StopAsync().Wait();
-            Environment.Exit(0);
-        }
-
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var exception = (Exception) e.ExceptionObject;
             if (e.IsTerminating)
             {
-                _logger.LogCritical(exception, "Terminating for uncaught exception.");
+                _logger.LogCritical(exception, "Terminating for uncaught exception");
                 Environment.ExitCode = -1;
             }
             else
             {
-                _logger.LogError(exception, "Exception caught.");
+                _logger.LogError(exception, "Exception caught");
             }
         }
 
         /// <summary>
         ///     搜索插件并加载
         /// </summary>
-        private static async Task LoadPackages()
+        private static async Task LoadPackagesAsync()
         {
             foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
                 await PluginManager.Instance.LoadPackageAsync(file);
@@ -102,24 +119,24 @@ namespace HyperaiShell.App
         /// <summary>
         ///     使插件生效
         /// </summary>
-        private static void SearchConfigurePluginServices(IHyperaiApplicationBuilder app)
+        private static void SearchConfigurePluginServices(IHostBuilder builder)
         {
             var plugins = PluginManager.Instance.GetManagedPlugins();
             foreach (var type in plugins)
             {
                 var plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureServices(app.Services);
+                builder.ConfigureServices(plugin.ConfigureServices);
             }
         }
 
         /// <summary>
         ///     初始化部分服务
         /// </summary>
-        private static void ConfigurePlugins(IHyperaiApplication app)
+        private static void ConfigurePlugins(IHost host)
         {
-            app.Provider.GetRequiredService<IUnitService>().SearchForUnits();
-            var service = app.Provider.GetRequiredService<IBotService>();
-            var config = app.Provider.GetRequiredService<IConfiguration>();
+            host.Services.GetRequiredService<IUnitService>().SearchForUnits();
+            var service = host.Services.GetRequiredService<IBotService>();
+            var config = host.Services.GetRequiredService<IConfiguration>();
             foreach (var type in PluginManager.Instance.GetManagedPlugins())
             {
                 var plugin = PluginManager.Instance.Activate(type);

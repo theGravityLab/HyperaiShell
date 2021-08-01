@@ -13,7 +13,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static AuthorizationExtensions()
         {
-            service = Shared.Application.Provider.GetRequiredService<IAuthorizationService>();
+            service = Shared.Host.Services.GetRequiredService<IAuthorizationService>();
         }
 
         /// <summary>

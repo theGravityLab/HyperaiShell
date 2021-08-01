@@ -13,8 +13,8 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static RelationExtensions()
         {
-            client = Shared.Application.Provider.GetRequiredService<IApiClient>();
-            unit = Shared.Application.Provider.GetRequiredService<IUnitService>();
+            client = Shared.Host.Services.GetRequiredService<IApiClient>();
+            unit = Shared.Host.Services.GetRequiredService<IUnitService>();
         }
 
         /// <summary>

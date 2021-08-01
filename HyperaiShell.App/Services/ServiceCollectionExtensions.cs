@@ -3,7 +3,6 @@ using System.Linq;
 using Ac682.Extensions.Logging.Console;
 using Hangfire;
 using Hangfire.Common;
-using Hangfire.Storage.SQLite;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +35,7 @@ namespace HyperaiShell.App.Services
             return services;
         }
 
-        public static IServiceCollection AddAuthorization(this IServiceCollection services)
+        public static IServiceCollection AddAuthorizationService(this IServiceCollection services)
         {
             services.AddSingleton<IAuthorizationService, AuthorizationService>();
             return services;
@@ -51,12 +50,6 @@ namespace HyperaiShell.App.Services
         public static IServiceCollection AddBlacklist(this IServiceCollection services)
         {
             services.AddSingleton<IBlockService, BlockService>();
-            return services;
-        }
-
-        public static IServiceCollection AddHangfire(this IServiceCollection services, Action<IGlobalConfiguration> configure)
-        {
-            configure(GlobalConfiguration.Configuration);
             return services;
         }
     }

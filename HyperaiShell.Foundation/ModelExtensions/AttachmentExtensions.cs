@@ -11,7 +11,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static AttachmentExtensions()
         {
-            service = Shared.Application.Provider.GetRequiredService<IAttachmentService>();
+            service = Shared.Host.Services.GetRequiredService<IAttachmentService>();
         }
 
         /// <summary>

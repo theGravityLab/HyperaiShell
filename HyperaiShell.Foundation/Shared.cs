@@ -1,9 +1,10 @@
 ﻿using Hyperai;
+using Microsoft.Extensions.Hosting;
 
 namespace HyperaiShell.Foundation
 {
     public static class Shared
     {
-        public static IHyperaiApplication Application { get; set; }
+        public static IHost Host { get; set; }
     }
 }

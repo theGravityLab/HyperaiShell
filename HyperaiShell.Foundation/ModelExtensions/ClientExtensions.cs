@@ -15,8 +15,8 @@ namespace HyperaiShell.Foundation.ModelExtensions
 
         static ClientExtensions()
         {
-            _client = Shared.Application.Provider.GetRequiredService<IApiClient>();
-            _logger = Shared.Application.Provider.GetRequiredService<ILoggerFactory>()
+            _client = Shared.Host.Services.GetRequiredService<IApiClient>();
+            _logger = Shared.Host.Services.GetRequiredService<ILoggerFactory>()
                 .CreateLogger(typeof(ClientExtensions).AssemblyQualifiedName);
         }
 
