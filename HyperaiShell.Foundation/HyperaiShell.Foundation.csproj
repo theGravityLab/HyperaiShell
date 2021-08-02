@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>HyperaiShell.Foundation</PackageId>
-    <Version>2021.8.2</Version>
+    <Version>2021.8.3</Version>
     <Authors>GravityLab</Authors>
     <Company>Unicore</Company>
     <PackageDescription>Basics for HyperShell plugins</PackageDescription>

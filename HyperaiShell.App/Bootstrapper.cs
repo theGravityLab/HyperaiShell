@@ -58,17 +58,16 @@ namespace HyperaiShell.App
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.All,
             };
-            JsonConvert.DefaultSettings = () => settings;
+            //JsonConvert.DefaultSettings = () => settings;
             
             services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
             services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
             services.AddScoped<IMessageChainFormatter, HyperCodeFormatter>();
             services.AddScoped<IMessageChainParser, HyperCodeParser>();
             services.AddHangfire(configure => configure
-                .UseSerializerSettings(settings) //TODO: 没用！
-                .UseSimpleAssemblyNameTypeSerializer()
                 .UseLogProvider(new HangfireLogProvider())
-                .UseSQLiteStorage("data/hangfire.sqlite.db"));
+                .UseSQLiteStorage("data/hangfire.sqlite.db")
+                .UseSerializerSettings(settings)); //TODO: 没用！
             services.AddHangfireServer();
             services.AddDistributedMemoryCache();
             services.AddBots();
