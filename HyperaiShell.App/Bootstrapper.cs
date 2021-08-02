@@ -67,7 +67,7 @@ namespace HyperaiShell.App
             services.AddHangfire(configure => configure
                 .UseLogProvider(new HangfireLogProvider())
                 .UseSQLiteStorage("data/hangfire.sqlite.db")
-                .UseSerializerSettings(settings)); //TODO: 没用！
+                .UseSerializerSettings(settings));
             services.AddHangfireServer();
             services.AddDistributedMemoryCache();
             services.AddBots();
