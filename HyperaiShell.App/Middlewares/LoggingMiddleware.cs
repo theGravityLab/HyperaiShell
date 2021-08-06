@@ -32,7 +32,7 @@ namespace HyperaiShell.App.Middlewares
                         args.Group, args.Whom, args.Operator, args.Duration);
                     break;
 
-                case GroupMemberJoinedEventArgs args:
+                case GroupJoinedEventArgs args:
                     _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator}", args, args.Group,
                         args.Who, args.Operator);
                     break;

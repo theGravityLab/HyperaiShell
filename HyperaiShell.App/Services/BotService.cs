@@ -35,81 +35,46 @@ namespace HyperaiShell.App.Services
             var transaction = _hub.StartTransaction(nameof(HyperaiShell), $"{nameof(BotService)}-{nameof(PushAsync)}",
                 args.GetType().Name);
             var self = await _client.RequestAsync<Self>(null);
+
             switch (args)
             {
-                case FriendMessageEventArgs friendMessage:
-                    await DoForAllAsync(x => x.OnFriendMessage(_client, friendMessage), self);
+                case FriendMessageEventArgs it:
+                    await DoForAllAsync(x => x.OnFriendMessage(_client, it), self);
                     break;
-
-                case GroupMessageEventArgs groupMessage:
-                    await DoForAllAsync(x => x.OnGroupMessage(_client, groupMessage), self);
+                case GroupMessageEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupMessage(_client, it), self);
                     break;
-
-                case FriendRecallEventArgs friendRecall:
-                    await DoForAllAsync(x => x.OnFriendRecall(_client, friendRecall), self);
+                case FriendRecallEventArgs it:
+                    await DoForAllAsync(x => x.OnFriendRecall(_client, it), self);
                     break;
-
-                case GroupRecallEventArgs groupRecall:
-                    await DoForAllAsync(x => x.OnGroupRecall(_client, groupRecall), self);
+                case GroupRecallEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupRecall(_client, it), self);
                     break;
-
-                case GroupMemberRequestEventArgs groupMemberRequest:
-                    await DoForAllAsync(x => x.OnMemberRequest(_client, groupMemberRequest), self);
+                case GroupMemberMutedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupMemberMuted(_client, it), self);
                     break;
-
-                case FriendRequestResponsedEventArgs friendRequestResp:
-                    await DoForAllAsync(x => x.OnFriendRequestResp(_client, friendRequestResp), self);
+                case GroupMemberUnmutedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupMemberUnmuted(_client, it), self);
                     break;
-
-                case MemberRequestResponsedEventArgs memberRequestResp:
-                    await DoForAllAsync(x => x.OnMemberRequestResp(_client, memberRequestResp), self);
+                case GroupAllMutedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupAllMuted(_client, it), self);
                     break;
-
-                case GroupJoinedEventArgs groupJoined:
-                    await DoForAllAsync(x => x.OnGroupJoined(_client, groupJoined), self);
+                case GroupLeftEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupLeft(_client, it), self);
                     break;
-
-                case GroupMemberJoinedEventArgs groupMemberJoined:
-                    await DoForAllAsync(x => x.OnGroupMemberJoined(_client, groupMemberJoined), self);
+                case GroupJoinedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupJoined(_client, it), self);
                     break;
-
-                case GroupMemberLeftEventArgs groupMemberLeft:
-                    await DoForAllAsync(x => x.OnGroupMemberLeft(_client, groupMemberLeft), self);
+                case GroupMemberCardChangedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupMemberCardChanged(_client, it), self);
                     break;
-
-                case GroupLeftEventArgs groupLeft:
-                    await DoForAllAsync(x => x.OnGroupLeft(_client, groupLeft), self);
+                case GroupMemberTitleChangedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupMemberTitleChanged(_client, it), self);
                     break;
-
-                case GroupMemberCardChangedEventArgs groupMemberCardChanged:
-                    await DoForAllAsync(x => x.OnGroupMemberCardChanged(_client, groupMemberCardChanged), self);
-                    break;
-
-                case GroupMemberTitleChangedEventArgs groupMemberTitleChanged:
-                    await DoForAllAsync(x => x.OnGroupMemberTitleChanged(_client, groupMemberTitleChanged), self);
-                    break;
-
-                case GroupMutedEventArgs groupMuted:
-                    await DoForAllAsync(x => x.OnGroupMuted(_client, groupMuted), self);
-                    break;
-
-                case GroupNameChangedEventArgs groupNameChanged:
-                    await DoForAllAsync(x => x.OnGroupNameChanged(_client, groupNameChanged), self);
-                    break;
-
-                case GroupPermissionChangedEventArgs groupPermissionChanged:
-                    await DoForAllAsync(x => x.OnGroupPermissionChanged(_client, groupPermissionChanged), self);
-                    break;
-
-                case GroupUnmutedEventArgs groupUnmuted:
-                    await DoForAllAsync(x => x.OnGroupUnmuted(_client, groupUnmuted), self);
-                    break;
-
-                case InvitationResponsedEventArgs invitationResp:
-                    await DoForAllAsync(x => x.OnInvitationResp(_client, invitationResp), self);
+                case GroupPermissionChangedEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupPermissionChanged(_client, it), self);
                     break;
             }
-
             await DoForAllAsync(x => x.OnEverything(_client, args), self);
             transaction.Finish();
         }
