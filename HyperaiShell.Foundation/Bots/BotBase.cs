@@ -12,51 +12,51 @@ namespace HyperaiShell.Foundation.Bots
         {
         }
 
-        public virtual void OnFriendMessage(IApiClient client, FriendMessageEventArgs args)
+        public virtual void OnFriendMessage(object client, FriendMessageEventArgs args)
         {
         }
 
-        public virtual void OnGroupMessage(IApiClient client, GroupMessageEventArgs args)
+        public virtual void OnGroupMessage(object client, GroupMessageEventArgs args)
         {
         }
 
-        public virtual void OnFriendRecall(IApiClient client, FriendRecallEventArgs args)
+        public virtual void OnFriendRecall(object client, FriendRecallEventArgs args)
         {
         }
 
-        public virtual void OnGroupRecall(IApiClient client, GroupRecallEventArgs args)
+        public virtual void OnGroupRecall(object client, GroupRecallEventArgs args)
         {
         }
 
-        public virtual void OnGroupLeft(IApiClient client, GroupLeftEventArgs args)
+        public virtual void OnGroupLeft(object client, GroupLeftEventArgs args)
         {
         }
 
-        public virtual void OnGroupJoined(IApiClient client, GroupJoinedEventArgs args)
+        public virtual void OnGroupJoined(object client, GroupJoinedEventArgs args)
         {
         }
 
-        public virtual void OnGroupMemberMuted(IApiClient client, GroupMemberMutedEventArgs args)
+        public virtual void OnGroupMemberMuted(object client, GroupMemberMutedEventArgs args)
         {
         }
 
-        public virtual void OnGroupMemberUnmuted(IApiClient client, GroupMemberUnmutedEventArgs args)
+        public virtual void OnGroupMemberUnmuted(object client, GroupMemberUnmutedEventArgs args)
         {
         }
 
-        public virtual void OnGroupAllMuted(IApiClient client, GroupAllMutedEventArgs args)
+        public virtual void OnGroupAllMuted(object client, GroupAllMutedEventArgs args)
         {
         }
 
-        public virtual void OnGroupMemberCardChanged(IApiClient client, GroupMemberCardChangedEventArgs args)
+        public virtual void OnGroupMemberCardChanged(object client, GroupMemberCardChangedEventArgs args)
         {
         }
 
-        public virtual void OnGroupMemberTitleChanged(IApiClient client, GroupMemberTitleChangedEventArgs args)
+        public virtual void OnGroupMemberTitleChanged(object client, GroupMemberTitleChangedEventArgs args)
         {
         }
 
-        public virtual void OnGroupPermissionChanged(IApiClient client, GroupPermissionChangedEventArgs args)
+        public virtual void OnGroupPermissionChanged(object client, GroupPermissionChangedEventArgs args)
         {
         }
     }
