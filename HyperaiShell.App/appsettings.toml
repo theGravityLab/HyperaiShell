@@ -1,6 +1,13 @@
 [Application]
 SelectedProfile = "gocqhttp"
+SentryEnabled = false
 Daddy = 10001
+
+[Sentry]
+Dsn = "YOUR_DSN"
+MinimumEventLevel = "Warning"
+TracesSampler = true
+AttachStackTrace = true
 
 [[Clients]]
 Name = "gocqhttp"

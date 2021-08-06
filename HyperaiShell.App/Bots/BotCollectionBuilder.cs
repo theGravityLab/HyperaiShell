@@ -6,7 +6,7 @@ namespace HyperaiShell.App.Bots
 {
     public class BotCollectionBuilder : IBotCollectionBuilder
     {
-        private readonly List<IBotBuilder> botBuilders = new List<IBotBuilder>();
+        private readonly List<IBotBuilder> botBuilders = new();
 
         IBotBuilder IBotCollectionBuilder.Add<TBot>()
         {

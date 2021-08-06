@@ -1,5 +1,4 @@
-﻿using Hyperai;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace HyperaiShell.Foundation
 {

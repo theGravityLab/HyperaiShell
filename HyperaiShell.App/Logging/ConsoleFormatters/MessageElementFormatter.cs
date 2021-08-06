@@ -6,7 +6,7 @@ using Hyperai.Messages.ConcreteModels;
 
 namespace HyperaiShell.App.Logging.ConsoleFormatters
 {
-    public class MessageElementFormatter:IObjectLoggingFormatter
+    public class MessageElementFormatter : IObjectLoggingFormatter
     {
         public bool IsTypeAvailable(Type type)
         {
@@ -19,8 +19,8 @@ namespace HyperaiShell.App.Logging.ConsoleFormatters
             {
                 obj switch
                 {
-                    Plain plain => new ColoredUnit($"\"{plain.Text}\"", foreground: ConsoleColor.DarkGreen),
-                    MessageElement ele => new ColoredUnit(ele.ToString(), foreground: ConsoleColor.DarkCyan),
+                    Plain plain => new ColoredUnit($"\"{plain.Text}\"", ConsoleColor.DarkGreen),
+                    MessageElement ele => new ColoredUnit(ele.ToString(), ConsoleColor.DarkCyan),
                     _ => new ColoredUnit("UNKNOWN", ConsoleColor.DarkGray)
                 }
             };

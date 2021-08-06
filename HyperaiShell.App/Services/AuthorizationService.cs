@@ -20,7 +20,7 @@ namespace HyperaiShell.App.Services
 
         public bool CheckTicket(RelationModel model, string specificName)
         {
-            if (specificName == "whosyourdaddy" && _daddy != null && _daddy == model.Identity.ToString()) return true;
+            if (specificName == "whoisyourdaddy" && _daddy != null && _daddy == model.Identity.ToString()) return true;
 
             var ticketBox = model.Retrieve<TicketBox>();
             if (ticketBox == null) return false;

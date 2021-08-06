@@ -2,7 +2,7 @@
 
 namespace HyperaiShell.Foundation.Plugins
 {
-    public interface IPluginRepository<TPlugin> : IPluginBelonging<TPlugin, IRepository> where TPlugin : PluginBase
+    public interface IPluginRepository<TPlugin> : IPluginProperty<TPlugin, IRepository> where TPlugin : PluginBase
     {
     }
 }

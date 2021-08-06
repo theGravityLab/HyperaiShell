@@ -5,7 +5,7 @@ using LogLevel = Hangfire.Logging.LogLevel;
 
 namespace HyperaiShell.App.Hangfire.Logging
 {
-    public class HangfireLogger: ILog
+    public class HangfireLogger : ILog
     {
         private readonly ILogger _logger;
 
@@ -13,10 +13,11 @@ namespace HyperaiShell.App.Hangfire.Logging
         {
             _logger = logger;
         }
+
         public bool Log(LogLevel logLevel, Func<string> messageFunc, Exception exception = null)
         {
             var message = messageFunc?.Invoke();
-             if (message == null) return true;
+            if (message == null) return true;
             _logger.Log(logLevel switch
             {
                 LogLevel.Debug => Microsoft.Extensions.Logging.LogLevel.Debug,

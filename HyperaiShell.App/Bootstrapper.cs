@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net.Http;
 using Ac682.Extensions.Logging.Console;
-using Ac682.Extensions.Logging.Console.Formatters;
 using Hangfire;
-using Hangfire.Common;
 using Hangfire.Storage.SQLite;
 using Hyperai;
 using Hyperai.Messages;
@@ -11,7 +9,6 @@ using Hyperai.Serialization;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
 using HyperaiShell.App.Hangfire.Logging;
-using HyperaiShell.App.Logging;
 using HyperaiShell.App.Logging.ConsoleFormatters;
 using HyperaiShell.App.Middlewares;
 using HyperaiShell.App.Plugins;
@@ -21,8 +18,10 @@ using HyperaiShell.Foundation.Plugins;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Sentry;
 
 namespace HyperaiShell.App
 {
@@ -41,43 +40,48 @@ namespace HyperaiShell.App
             services.AddSingleton<IRepository>(repository);
 
 
-            services.AddLogging(options => options
-                .AddConsole(c => c
-                    .SetMinimalLevel(LogLevel.Information)
-                    .AddBuiltinFormatters()
-                    .AddFormatter<MessageElementFormatter>()
-                    .AddFormatter<RelationFormatter>()
-                    .AddFormatter<EventArgsFormatter>()
-                )
-                .AddFile("logs/app_{Date}.log")
-            );
+            services.AddLogging(builder =>
+            {
+                builder
+                    .AddConfiguration(config)
+                    .AddConsole(c => c
+                        .SetMinimalLevel(LogLevel.Debug)
+                        .AddBuiltinFormatters()
+                        .AddFormatter<MessageElementFormatter>()
+                        .AddFormatter<RelationFormatter>()
+                        .AddFormatter<EventArgsFormatter>()
+                    )
+                    .AddDebug()
+                    .AddFile("logs/app_{date}.log");
 
-            var settings = new JsonSerializerSettings()
+                if (config["Application:SentryEnabled"] == "True") builder.AddSentry();
+            });
+
+            var settings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.All,
+                TypeNameHandling = TypeNameHandling.All
             };
-            //JsonConvert.DefaultSettings = () => settings;
-            
-            services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>));
-            services.AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>));
-            services.AddScoped<IMessageChainFormatter, HyperCodeFormatter>();
-            services.AddScoped<IMessageChainParser, HyperCodeParser>();
-            services.AddHangfire(configure => configure
-                .UseLogProvider(new HangfireLogProvider())
-                .UseSQLiteStorage("data/hangfire.sqlite.db")
-                .UseSerializerSettings(settings));
-            services.AddHangfireServer();
-            services.AddDistributedMemoryCache();
-            services.AddBots();
-            services.AddClients(config);
-            services.AddUnits();
-            services.AddAttachments();
-            services.AddAuthorizationService();
-            services.AddBlacklist();
 
-            services.AddHyperaiServer(options => options
+            services.AddScoped(typeof(IPluginConfiguration<>), typeof(PluginConfiguration<>))
+                .AddScoped(typeof(IPluginRepository<>), typeof(PluginRepository<>))
+                .AddScoped<IMessageChainFormatter, HyperCodeFormatter>()
+                .AddScoped<IMessageChainParser, HyperCodeParser>()
+                .AddHangfire(configure => configure
+                    .UseLogProvider(new HangfireLogProvider())
+                    .UseSQLiteStorage("data/hangfire.sqlite.db")
+                    .UseSerializerSettings(settings))
+                .AddHttpClient()
+                .AddHangfireServer()
+                .AddDistributedMemoryCache()
+                .AddBots()
+                .AddClients(config)
+                .AddUnits()
+                .AddAttachments()
+                .AddAuthorizationService()
+                .AddBlacklist()
+                .AddHyperaiServer(options => options
                     .UseLogging()
                     .UseBlacklist()
                     .UseTranslator()

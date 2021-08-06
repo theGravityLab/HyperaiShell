@@ -6,7 +6,7 @@ namespace HyperaiShell.App.Models
 {
     public class TicketBox
     {
-        public List<TicketBase> Tickets { get; set; } = new List<TicketBase>();
+        public List<TicketBase> Tickets { get; set; } = new();
 
         public bool Check(string name)
         {

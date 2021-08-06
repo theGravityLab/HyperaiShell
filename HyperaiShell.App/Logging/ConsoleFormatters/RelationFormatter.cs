@@ -5,7 +5,7 @@ using Hyperai.Relations;
 
 namespace HyperaiShell.App.Logging.ConsoleFormatters
 {
-    public class RelationFormatter: IObjectLoggingFormatter
+    public class RelationFormatter : IObjectLoggingFormatter
     {
         public bool IsTypeAvailable(Type type)
         {
@@ -18,14 +18,14 @@ namespace HyperaiShell.App.Logging.ConsoleFormatters
             {
                 obj switch
                 {
-                    Friend friend => new ColoredUnit(friend.Nickname, foreground: ConsoleColor.DarkMagenta),
-                    Member member => new ColoredUnit(member.DisplayName, foreground: ConsoleColor.DarkMagenta),
-                    Group group => new ColoredUnit(group.Name, foreground: ConsoleColor.DarkMagenta),
+                    Friend friend => new ColoredUnit(friend.Nickname, ConsoleColor.DarkMagenta),
+                    Member member => new ColoredUnit(member.DisplayName, ConsoleColor.DarkMagenta),
+                    Group group => new ColoredUnit(group.Name, ConsoleColor.DarkMagenta),
                     _ => new ColoredUnit(((RelationModel) obj).Identity.ToString())
                 },
-                new ColoredUnit("(", foreground: ConsoleColor.DarkGray),
-                new ColoredUnit(((RelationModel) obj).Identifier, foreground:ConsoleColor.Red),
-                new ColoredUnit(")", foreground: ConsoleColor.DarkGray)
+                new ColoredUnit("(", ConsoleColor.DarkGray),
+                new ColoredUnit(((RelationModel) obj).Identifier, ConsoleColor.Red),
+                new ColoredUnit(")", ConsoleColor.DarkGray)
             };
         }
     }

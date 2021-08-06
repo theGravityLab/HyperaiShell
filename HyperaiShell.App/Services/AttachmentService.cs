@@ -1,9 +1,10 @@
 ﻿using System;
 using Hyperai.Relations;
-using HyperaiShell.App.Models;
 using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Logging;
+using Sentry;
+using Attachment = HyperaiShell.App.Models.Attachment;
 
 namespace HyperaiShell.App.Services
 {
@@ -11,15 +12,19 @@ namespace HyperaiShell.App.Services
     {
         private readonly ILogger _logger;
         private readonly IRepository _repository;
+        private readonly IHub _hub;
 
-        public AttachmentService(IRepository repository, ILogger<AttachmentService> logger)
+        public AttachmentService(IRepository repository, ILogger<AttachmentService> logger, IHub hub)
         {
             _repository = repository;
             _logger = logger;
+            _hub = hub;
         }
 
         public void Attach<T>(T ins, RelationModel toWhom)
         {
+            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
+                $"{nameof(AttachmentService)}-{nameof(Attach)}", ins.GetType().Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
                 .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
@@ -38,22 +43,30 @@ namespace HyperaiShell.App.Services
                 };
                 _repository.Store(first);
             }
+
+            transaction.Finish();
         }
 
         public void Detach<T>(RelationModel toWhom)
         {
+            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
+                $"{nameof(AttachmentService)}-{nameof(Detach)}", typeof(T).Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
                 .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
             if (first != null) _repository.Delete<Attachment>(first.Id);
+            transaction.Finish();
         }
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
+            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
+                $"{nameof(AttachmentService)}-{nameof(Retrieve)}", typeof(T).Name);
             var typeName = typeof(T).FullName;
             var ins = (T) _repository.Query<Attachment>()
                 .Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
             return ins;
+            transaction.Finish();
         }
 
         public ForAttachmentUpdateScope<T> For<T>(RelationModel model, out T ins, Func<T> generator = null)

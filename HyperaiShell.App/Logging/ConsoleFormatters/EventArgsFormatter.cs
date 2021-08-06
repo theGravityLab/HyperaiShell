@@ -5,7 +5,7 @@ using Hyperai.Events;
 
 namespace HyperaiShell.App.Logging.ConsoleFormatters
 {
-    public class EventArgsFormatter: IObjectLoggingFormatter
+    public class EventArgsFormatter : IObjectLoggingFormatter
     {
         public bool IsTypeAvailable(Type type)
         {
@@ -16,7 +16,7 @@ namespace HyperaiShell.App.Logging.ConsoleFormatters
         {
             return new[]
             {
-                new ColoredUnit(obj.GetType().Name, foreground: ConsoleColor.Yellow)
+                new ColoredUnit(obj.GetType().Name, ConsoleColor.Yellow)
             };
         }
     }

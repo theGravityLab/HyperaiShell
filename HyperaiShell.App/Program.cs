@@ -1,18 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Hangfire;
-using Hyperai;
-using Hyperai.Messages;
-using Hyperai.Messages.ConcreteModels;
-using Hyperai.Relations;
 using Hyperai.Services;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.Foundation;
-using HyperaiShell.Foundation.ModelExtensions;
 using HyperaiShell.Foundation.Plugins;
 using HyperaiShell.Foundation.Services;
 using LiteDB;
@@ -20,9 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Serilog;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Sentry;
 
 namespace HyperaiShell.App
 {
@@ -58,6 +51,7 @@ namespace HyperaiShell.App
             // ConfigurePlugins(Shared.Application);
             // Shared.Application.Run();
 
+
             var startup = new Bootstrapper();
             var hostBuilder = new HostBuilder()
                 .ConfigureServices(startup.ConfigureServices)
@@ -83,8 +77,9 @@ namespace HyperaiShell.App
 |  __/| | | (_) | |  _  | |_| | |_) |  __/ | | (_| | |
 |_|   |_|  \___// |_| |_|\__, | .__/ \___|_|  \__,_|_|
               |__/       |___/|_|                     ");
-            _logger.LogInformation("Powered by ProjHyperai\nHyperaiShell v{HyperaiShellV} (Plugin based on v{PluginBaseV})\nHyperai v{HyperaiV}\nHyperai.Units v{HyperaiUnitsV}",
-                typeof(Program).Assembly.GetName().Version, 
+            _logger.LogInformation(
+                "Powered by ProjHyperai\nHyperaiShell v{HyperaiShellV} (Plugin based on v{PluginBaseV})\nHyperai v{HyperaiV}\nHyperai.Units v{HyperaiUnitsV}",
+                typeof(Program).Assembly.GetName().Version,
                 typeof(PluginBase).Assembly.GetName().Version,
                 typeof(IApiClient).Assembly.GetName().Version,
                 typeof(UnitService).Assembly.GetName().Version);
@@ -138,7 +133,7 @@ namespace HyperaiShell.App
             {
                 var plugin = PluginManager.Instance.Activate(type);
                 plugin.ConfigureBots(service.Builder, config);
-                plugin.PostConfigure(config);
+                plugin.OnStarted(host.Services, config);
                 _logger.LogInformation("Plugin {PluginIdentity} activated", plugin.Context.Meta.Identity);
             }
         }

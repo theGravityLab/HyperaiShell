@@ -1,4 +1,5 @@
-﻿using HyperaiShell.Foundation.Bots;
+﻿using System;
+using HyperaiShell.Foundation.Bots;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,6 @@ namespace HyperaiShell.Foundation.Plugins
 
         public abstract void ConfigureServices(IServiceCollection services);
 
-        public abstract void PostConfigure(IConfiguration config);
+        public abstract void OnStarted(IServiceProvider provider, IConfiguration config);
     }
 }

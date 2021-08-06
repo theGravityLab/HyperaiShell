@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HyperaiShell.App.Hangfire.Logging
 {
-    public class HangfireLogProvider: ILogProvider
+    public class HangfireLogProvider : ILogProvider
     {
         public ILog GetLogger(string name)
         {

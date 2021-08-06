@@ -17,8 +17,8 @@ namespace HyperaiShell.App.Plugins
 {
     public class PluginManager
     {
-        private readonly Dictionary<Type, PluginContext> plugins = new Dictionary<Type, PluginContext>();
-        public static PluginManager Instance { get; } = new PluginManager();
+        private readonly Dictionary<Type, PluginContext> plugins = new();
+        public static PluginManager Instance { get; } = new();
 
         public IEnumerable<Type> GetManagedPlugins()
         {

@@ -8,27 +8,32 @@ using HyperaiShell.App.Bots;
 using HyperaiShell.Foundation.Bots;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Logging;
+using Sentry;
 
 namespace HyperaiShell.App.Services
 {
     public class BotService : IBotService
     {
         private readonly IApiClient _client;
-        private readonly IServiceProvider _provider;
         private readonly ILogger _logger;
+        private readonly IServiceProvider _provider;
+        private readonly IHub _hub;
         private BotCollection bots;
 
-        public BotService(IApiClient client, IServiceProvider provider, ILogger<BotService> logger)
+        public BotService(IApiClient client, IServiceProvider provider, ILogger<BotService> logger, IHub hub)
         {
             _client = client;
             _provider = provider;
             _logger = logger;
+            _hub = hub;
         }
 
         public IBotCollectionBuilder Builder { get; } = new BotCollectionBuilder();
 
         public async Task PushAsync(GenericEventArgs args)
         {
+            var transaction = _hub.StartTransaction(nameof(HyperaiShell), $"{nameof(BotService)}-{nameof(PushAsync)}",
+                args.GetType().Name);
             var self = await _client.RequestAsync<Self>(null);
             switch (args)
             {
@@ -106,6 +111,7 @@ namespace HyperaiShell.App.Services
             }
 
             await DoForAllAsync(x => x.OnEverything(_client, args), self);
+            transaction.Finish();
         }
 
         private async Task DoForAllAsync(Action<BotBase> action, Self me)
@@ -118,9 +124,8 @@ namespace HyperaiShell.App.Services
                 var task = Task.Run(() => action(bot), CancellationToken.None);
                 await task;
                 if (task.IsFaulted)
-                {
-                    _logger.LogError(task.Exception,"Bot({BotType}) action({ActionName}) exited unsuccessfully", bot.GetType().Name, action.Method.Name);
-                }
+                    _logger.LogError(task.Exception, "Bot({BotType}) action({ActionName}) exited unsuccessfully",
+                        bot.GetType().Name, action.Method.Name);
             }
         }
     }

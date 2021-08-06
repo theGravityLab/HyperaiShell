@@ -19,7 +19,8 @@ namespace HyperaiShell.App.Middlewares
             switch (eventArgs)
             {
                 case GroupMessageEventArgs args:
-                    _logger.LogInformation("{ArgsType} received {Group}-{User}:\n{Message}", args, args.Group, args.User, args.Message);
+                    _logger.LogInformation("{ArgsType} received {Group}-{User}:\n{Message}", args, args.Group,
+                        args.User, args.Message);
                     break;
 
                 case FriendMessageEventArgs args:
@@ -27,15 +28,28 @@ namespace HyperaiShell.App.Middlewares
                     break;
 
                 case GroupMemberMutedEventArgs args:
-                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator} for {Duration}", args, args.Group, args.Whom, args.Operator, args.Duration);
+                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator} for {Duration}", args,
+                        args.Group, args.Whom, args.Operator, args.Duration);
                     break;
 
                 case GroupMemberJoinedEventArgs args:
-                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator}", args, args.Group, args.Who, args.Operator);
+                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator}", args, args.Group,
+                        args.Who, args.Operator);
                     break;
 
                 case GroupMemberUnmutedEventArgs args:
-                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator}", args, args.Group, args.Whom, args.Operator);
+                    _logger.LogInformation("{ArgsType} received {Group}:\n{User} by {Operator}", args, args.Group,
+                        args.Whom, args.Operator);
+                    break;
+
+                case FriendRecallEventArgs args:
+                    _logger.LogInformation("{ArgsType} received {Friend}\n{Message}", args, args.WhoseMessage,
+                        args.MessageId);
+                    break;
+
+                case GroupRecallEventArgs args:
+                    _logger.LogInformation("{ArgsType} received {Group}-{User} by {Operator}\n{Message}", args,
+                        args.Group, args.WhoseMessage, args.Operator, args.MessageId);
                     break;
 
                 default:

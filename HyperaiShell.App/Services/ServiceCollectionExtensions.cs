@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Ac682.Extensions.Logging.Console;
-using Hangfire;
-using Hangfire.Common;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace HyperaiShell.App.Services
 {

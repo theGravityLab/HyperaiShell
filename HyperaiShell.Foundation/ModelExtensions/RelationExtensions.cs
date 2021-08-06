@@ -28,10 +28,10 @@ namespace HyperaiShell.Foundation.ModelExtensions
             return client.RequestAsync(new Member {Identity = identity, Group = new Lazy<Group>(group)}).GetAwaiter()
                 .GetResult();
         }
-        
-        
+
+
         /// <summary>
-        /// 监听该 <see cref="Friend" /> 的下一条消息
+        ///     监听该 <see cref="Friend" /> 的下一条消息
         /// </summary>
         /// <param name="friend">目标好友</param>
         /// <param name="action">当消息抵达时的操作</param>
@@ -60,7 +60,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         /// <param name="msToExpire">过期时间(ms)</param>
         public static void Await(this Member member, ActionDelegate action, int msToExpire = 30000)
         {
-            unit.WaitOne(Signature.FromMember(member.Group.Value.Identity,member.Identity), action,
+            unit.WaitOne(Signature.FromMember(member.Group.Value.Identity, member.Identity), action,
                 TimeSpan.FromMilliseconds(msToExpire));
         }
     }

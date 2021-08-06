@@ -17,7 +17,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 授予限次权限
+        ///     授予限次权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <param name="name">权限名</param>
@@ -28,7 +28,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 授予限时权限
+        ///     授予限时权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <param name="name">权限名</param>
@@ -39,7 +39,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 授予宿主特定权限
+        ///     授予宿主特定权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <param name="name">权限名</param>
@@ -49,7 +49,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 检查宿主是否具有某权限
+        ///     检查宿主是否具有某权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <param name="name">权限名</param>
@@ -60,7 +60,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 撤销权限
+        ///     撤销权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <param name="name">权限名</param>
@@ -70,7 +70,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 获取全部由 Ticket 给予的权限
+        ///     获取全部由 Ticket 给予的权限
         /// </summary>
         /// <param name="model">宿主</param>
         /// <returns>权限名单</returns>

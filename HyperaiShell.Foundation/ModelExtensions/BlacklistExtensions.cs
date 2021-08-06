@@ -14,7 +14,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 是否被搬
+        ///     是否被搬
         /// </summary>
         /// <param name="user">用户对象</param>
         /// <returns></returns>
@@ -24,7 +24,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 搬它
+        ///     搬它
         /// </summary>
         /// <param name="user">用户</param>
         /// <param name="reason">理由</param>
@@ -34,7 +34,7 @@ namespace HyperaiShell.Foundation.ModelExtensions
         }
 
         /// <summary>
-        /// 反搬它
+        ///     反搬它
         /// </summary>
         /// <param name="user">用户</param>
         public static void Deban(this User user)
