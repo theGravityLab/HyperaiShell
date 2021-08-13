@@ -39,22 +39,28 @@ namespace HyperaiShell.App
             services.AddSingleton<IConfiguration>(config);
             services.AddSingleton<IRepository>(repository);
 
-
             services.AddLogging(builder =>
             {
                 builder
                     .AddConfiguration(config)
-                    .AddConsole(c => c
+                    .AddDebug()
+                    .AddFile("logs/app_{date}.log");
+
+                if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") builder.AddSentry();
+                if (config["Application:DashboardEnabled"].ToUpper() == "TRUE")
+                {
+                    
+                }
+                else
+                {
+                    builder.AddConsole(c => c
                         .SetMinimalLevel(LogLevel.Debug)
                         .AddBuiltinFormatters()
                         .AddFormatter<MessageElementFormatter>()
                         .AddFormatter<RelationFormatter>()
                         .AddFormatter<EventArgsFormatter>()
-                    )
-                    .AddDebug()
-                    .AddFile("logs/app_{date}.log");
-
-                if (config["Application:SentryEnabled"] == "True") builder.AddSentry();
+                    );
+                }
             });
 
             var settings = new JsonSerializerSettings
@@ -73,20 +79,20 @@ namespace HyperaiShell.App
                     .UseSQLiteStorage("data/hangfire.sqlite.db")
                     .UseSerializerSettings(settings))
                 .AddHttpClient()
-                .AddHangfireServer()
+                //.AddHangfireServer()
+                // .AddHyperaiServer(options => options
+                //     .UseLogging()
+                //     .UseBlacklist()
+                //     .UseTranslator()
+                //     .UseBots()
+                //     .UseUnits())
                 .AddDistributedMemoryCache()
                 .AddBots()
                 .AddClients(config)
                 .AddUnits()
                 .AddAttachments()
                 .AddAuthorizationService()
-                .AddBlacklist()
-                .AddHyperaiServer(options => options
-                    .UseLogging()
-                    .UseBlacklist()
-                    .UseTranslator()
-                    .UseBots()
-                    .UseUnits());
+                .AddBlacklist();
         }
     }
 }

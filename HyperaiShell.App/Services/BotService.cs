@@ -32,7 +32,7 @@ namespace HyperaiShell.App.Services
 
         public async Task PushAsync(GenericEventArgs args)
         {
-            var transaction = _hub.StartTransaction(nameof(HyperaiShell), $"{nameof(BotService)}-{nameof(PushAsync)}",
+            var transaction = _hub.StartTransaction($"{nameof(HyperaiShell)}-{nameof(BotService)}", nameof(PushAsync),
                 args.GetType().Name);
             var self = await _client.RequestAsync<Self>(null);
 

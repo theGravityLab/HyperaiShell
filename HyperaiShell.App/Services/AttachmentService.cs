@@ -23,8 +23,8 @@ namespace HyperaiShell.App.Services
 
         public void Attach<T>(T ins, RelationModel toWhom)
         {
-            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
-                $"{nameof(AttachmentService)}-{nameof(Attach)}", ins.GetType().Name);
+            var transaction = _hub.StartTransaction($"{nameof(HyperaiShell)}-{nameof(AttachmentService)}",nameof(Attach)
+                , ins.GetType().Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
                 .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
@@ -49,8 +49,8 @@ namespace HyperaiShell.App.Services
 
         public void Detach<T>(RelationModel toWhom)
         {
-            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
-                $"{nameof(AttachmentService)}-{nameof(Detach)}", typeof(T).Name);
+            var transaction = _hub.StartTransaction($"{nameof(HyperaiShell)}-{nameof(AttachmentService)}",nameof(Detach)
+                , typeof(T).Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
                 .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
@@ -60,13 +60,13 @@ namespace HyperaiShell.App.Services
 
         public T Retrieve<T>(RelationModel fromWhom)
         {
-            var transaction = _hub.StartTransaction(nameof(HyperaiShell),
-                $"{nameof(AttachmentService)}-{nameof(Retrieve)}", typeof(T).Name);
+            var transaction = _hub.StartTransaction($"{nameof(HyperaiShell)}-{nameof(AttachmentService)}",
+                nameof(Retrieve), typeof(T).Name);
             var typeName = typeof(T).FullName;
             var ins = (T) _repository.Query<Attachment>()
                 .Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
-            return ins;
             transaction.Finish();
+            return ins;
         }
 
         public ForAttachmentUpdateScope<T> For<T>(RelationModel model, out T ins, Func<T> generator = null)
