@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Hangfire.Dashboard;
 using Hyperai.Services;
 using HyperaiShell.Foundation.Services;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,12 @@ namespace HyperaiShell.App.Services
         public static IServiceCollection AddBlacklist(this IServiceCollection services)
         {
             services.AddSingleton<IBlockService, BlockService>();
+            return services;
+        }
+
+        public static IServiceCollection AddDashboardServer(this IServiceCollection services)
+        {
+            services.AddHostedService<DashboardServer>();
             return services;
         }
     }

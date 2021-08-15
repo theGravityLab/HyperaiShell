@@ -31,7 +31,7 @@
     <PackageReference Include="Sentry" Version="3.8.3" />
     <PackageReference Include="Sentry.Extensions.Logging" Version="3.8.3" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
-    <PackageReference Include="Spectre.Console" Version="0.41.0" />
+    <PackageReference Include="Terminal.Gui" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,27 +1,26 @@
-﻿using System;
-using System.Net.Http;
-using Ac682.Extensions.Logging.Console;
+﻿using Ac682.Extensions.Logging.Console;
 using Hangfire;
 using Hangfire.Storage.SQLite;
-using Hyperai;
 using Hyperai.Messages;
 using Hyperai.Serialization;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
 using HyperaiShell.App.Hangfire.Logging;
 using HyperaiShell.App.Logging.ConsoleFormatters;
-using HyperaiShell.App.Middlewares;
 using HyperaiShell.App.Plugins;
-using HyperaiShell.App.Services;
 using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Plugins;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Sentry;
+using HyperaiShell.App.Services;
+using Sentry.Extensions.Logging.Extensions.DependencyInjection;
+using HyperaiShell.App.DashboardInterface;
+using HyperaiShell.App.Logging;
+using Hyperai;
+using HyperaiShell.App.Middlewares;
 
 namespace HyperaiShell.App
 {
@@ -47,9 +46,13 @@ namespace HyperaiShell.App
                     .AddFile("logs/app_{date}.log");
 
                 if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") builder.AddSentry();
-                if (config["Application:DashboardEnabled"].ToUpper() == "TRUE")
+                
+                if (config["Application:DashboardEnabled"]?.ToUpper() == "TRUE")
                 {
-                    
+                    builder.AddDashboardLogger();
+                    builder.Services
+                    .AddDashboardServer()
+                    .AddDashboardIntegration();
                 }
                 else
                 {
@@ -79,13 +82,13 @@ namespace HyperaiShell.App
                     .UseSQLiteStorage("data/hangfire.sqlite.db")
                     .UseSerializerSettings(settings))
                 .AddHttpClient()
-                //.AddHangfireServer()
-                // .AddHyperaiServer(options => options
-                //     .UseLogging()
-                //     .UseBlacklist()
-                //     .UseTranslator()
-                //     .UseBots()
-                //     .UseUnits())
+                .AddHangfireServer()
+                .AddHyperaiServer(options => options
+                    .UseLogging()
+                    .UseBlacklist()
+                    .UseTranslator()
+                    .UseBots()
+                    .UseUnits())
                 .AddDistributedMemoryCache()
                 .AddBots()
                 .AddClients(config)

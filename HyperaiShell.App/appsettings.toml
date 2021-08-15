@@ -1,6 +1,7 @@
 [Application]
 SelectedProfile = "gocqhttp"
 SentryEnabled = false
+DashboardEnabled = false # dot NOT turn on for it's in exp stage
 Daddy = 10001
 
 [Sentry]

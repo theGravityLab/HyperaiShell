@@ -40,18 +40,6 @@ namespace HyperaiShell.App
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-            // var appBuilder = new HyperaiApplicationBuilder();
-            //
-            // appBuilder.UseStartup<Bootstrapper>();
-            // LoadPackagesAsync().Wait();
-            // SearchConfigurePluginServices(appBuilder);
-            // Shared.Application = appBuilder.Build();
-            // _logger = Shared.Application.Provider.GetRequiredService<ILogger<Program>>();
-            // PrintAssemblyInfo();
-            // ConfigurePlugins(Shared.Application);
-            // Shared.Application.Run();
-
-
             var startup = new Bootstrapper();
             var hostBuilder = new HostBuilder()
                 .ConfigureServices(startup.ConfigureServices)
