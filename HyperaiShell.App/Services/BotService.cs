@@ -74,6 +74,12 @@ namespace HyperaiShell.App.Services
                 case GroupPermissionChangedEventArgs it:
                     await DoForAllAsync(x => x.OnGroupPermissionChanged(_client, it), self);
                     break;
+                case FriendRequestEventArgs it:
+                    await DoForAllAsync(x => x.OnFriendRequest(_client, it), self);
+                    break;
+                case GroupRequestEventArgs it:
+                    await DoForAllAsync(x => x.OnGroupRequest(_client, it), self);
+                    break;
             }
             await DoForAllAsync(x => x.OnEverything(_client, args), self);
             transaction.Finish();

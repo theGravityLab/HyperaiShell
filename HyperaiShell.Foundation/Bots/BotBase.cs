@@ -59,5 +59,13 @@ namespace HyperaiShell.Foundation.Bots
         public virtual void OnGroupPermissionChanged(object client, GroupPermissionChangedEventArgs args)
         {
         }
+
+        public virtual void OnGroupRequest(object client, GroupRequestEventArgs args)
+        {
+        }
+
+        public virtual void OnFriendRequest(object client, FriendRequestEventArgs args)
+        {
+        }
     }
 }
