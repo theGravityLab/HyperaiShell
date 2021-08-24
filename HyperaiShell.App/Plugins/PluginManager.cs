@@ -61,7 +61,6 @@ namespace HyperaiShell.App.Plugins
 
                 var tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 var path = reader.ExtractFile(packageFile, tmpPath, NullLogger.Instance);
-                //Type type = Load(await File.ReadAllBytesAsync(path));
                 var type = Load(path);
                 if (type == null) continue;
                 var context = new PluginContext();
