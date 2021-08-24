@@ -49,11 +49,5 @@ namespace HyperaiShell.App.Services
             services.AddSingleton<IBlockService, BlockService>();
             return services;
         }
-
-        public static IServiceCollection AddDashboardServer(this IServiceCollection services)
-        {
-            services.AddHostedService<DashboardServer>();
-            return services;
-        }
     }
 }

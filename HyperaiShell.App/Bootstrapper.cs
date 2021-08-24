@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using HyperaiShell.App.Services;
 using Sentry.Extensions.Logging.Extensions.DependencyInjection;
-using HyperaiShell.App.DashboardInterface;
 using HyperaiShell.App.Logging;
 using Hyperai;
 using HyperaiShell.App.Middlewares;
@@ -47,13 +46,6 @@ namespace HyperaiShell.App
 
                 if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") builder.AddSentry();
                 
-                if (config["Application:DashboardEnabled"]?.ToUpper() == "TRUE")
-                {
-                    builder.AddDashboardLogger();
-                    builder.Services
-                    .AddDashboardServer()
-                    .AddDashboardIntegration();
-                }
                 else
                 {
                     builder.AddConsole(c => c

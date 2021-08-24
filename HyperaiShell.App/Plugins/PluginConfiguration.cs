@@ -9,7 +9,7 @@ namespace HyperaiShell.App.Plugins
         public Type BelongingTo =>
             typeof(TPlugin);
 
-        public IConfiguration Value =>
-            PluginManager.Instance.GetContextOfPlugin(typeof(TPlugin)).Configuration.Value;
+        public IConfiguration Value => null;
+            //PluginManager.Instance.GetContextOfPlugin(typeof(TPlugin)).Configuration.Value;
     }
 }
