@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Hyperai.Services;
 using Hyperai.Units;
 using HyperaiShell.App.Data;
+using HyperaiShell.App.Logging.ConsoleFormatters;
+using HyperaiShell.App.Packages;
 using HyperaiShell.App.Plugins;
 using HyperaiShell.Foundation;
+using HyperaiShell.Foundation.Data;
 using HyperaiShell.Foundation.Plugins;
 using HyperaiShell.Foundation.Services;
 using LiteDB;
@@ -15,48 +21,80 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NuGet.Packaging;
+using Ac682.Extensions.Logging.Console;
 using Sentry;
+using PluginManager = HyperaiShell.App.Plugins.PluginManager;
 
 namespace HyperaiShell.App
 {
     public class Program
     {
         private static ILogger _logger;
-
-        private static void Main()
+        public async static Task Main()
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            // manager instance init
+            PackageManager.Instance.PluginPackageLoaded = PluginPackageLoaded;
 
-            BsonMapper.Global = new BsonMapper(null, new AssemblyNameTypeNameBinder());
+            //env init
+            var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
+            var config = cfgBuilder.Build();
 
-            var dirs = new[]
-            {
-                "plugins",
-                "logs",
-                "data",
-                "config"
-            }.Select(x => Path.Combine(Environment.CurrentDirectory, x));
-            foreach (var dir in dirs)
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-
-            var startup = new Bootstrapper();
+            var startup = new Bootstrapper(config);
             var hostBuilder = new HostBuilder()
                 .ConfigureServices(startup.ConfigureServices)
                 .UseConsoleLifetime();
+            // search packages and load
+            var nupkgs = new Queue<string>();
+            foreach (var nupkg in Directory.GetFiles("plugins", "*.nupkg"))
+            {
+                nupkgs.Enqueue(nupkg);
+            }
 
-            LoadPackagesAsync().Wait();
-            SearchConfigurePluginServices(hostBuilder);
+            await PackageManager.Instance.BeginBatchAsync(nupkgs);
+
+            PluginManager.Instance.ActivateAll(plugin => hostBuilder.ConfigureServices(plugin.ConfigureServices));
+
             Shared.Host = hostBuilder.Build();
+
             _logger = Shared.Host.Services.GetRequiredService<ILogger<Program>>();
-            PrintAssemblyInfo();
-            ConfigurePlugins(Shared.Host);
+
+            Welcome();
+
+            var botService = Shared.Host.Services.GetRequiredService<IBotService>();
+            var unitService = Shared.Host.Services.GetRequiredService<IUnitService>();
+            unitService.SearchForUnits();
+
+            PluginManager.Instance.ActivateAll(plugin =>
+            {
+                plugin.ConfigureBots(botService.Builder, config);
+                plugin.OnStarted(Shared.Host.Services, config);
+                _logger.LogInformation("Plugin {PluginIdentity}/{Version} activated", plugin.Context.Meta.Identity,
+                    plugin.GetType().Assembly.GetName().Version);
+            });
+
             var task = Shared.Host.RunAsync();
-            //TEST HERE
-            task.Wait();
+            // TEST HERE
+
+            await task;
         }
 
-        private static void PrintAssemblyInfo()
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = (Exception) e.ExceptionObject;
+            if (e.IsTerminating)
+            {
+                _logger.LogCritical(exception, "Terminating for uncaught exception");
+                Environment.ExitCode = -1;
+            }
+            else
+            {
+                _logger.LogError(exception, "Exception caught");
+            }
+        }
+
+        private static void Welcome()
         {
             _logger.LogInformation(@"
  ____            _ _   _                            _ 
@@ -73,56 +111,48 @@ namespace HyperaiShell.App
                 typeof(UnitService).Assembly.GetName().Version);
         }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static async void PluginPackageLoaded(string fileName, PackageArchiveReader reader,
+            IEnumerable<Assembly> assemblies)
         {
-            var exception = (Exception) e.ExceptionObject;
-            if (e.IsTerminating)
-            {
-                _logger.LogCritical(exception, "Terminating for uncaught exception");
-                Environment.ExitCode = -1;
-            }
-            else
-            {
-                _logger.LogError(exception, "Exception caught");
-            }
-        }
+            var plugins = assemblies.SelectMany(x =>
+                x.GetExportedTypes().Where(y => !y.IsAbstract && y.IsSubclassOf(typeof(PluginBase))));
+            var plugin = plugins.FirstOrDefault(); // 其他的都无视掉
 
-        /// <summary>
-        ///     搜索插件并加载
-        /// </summary>
-        private static async Task LoadPackagesAsync()
-        {
-            foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "plugins"), "*.nupkg"))
-                await PluginManager.Instance.LoadPackageAsync(file);
-        }
-
-        /// <summary>
-        ///     使插件生效
-        /// </summary>
-        private static void SearchConfigurePluginServices(IHostBuilder builder)
-        {
-            var plugins = PluginManager.Instance.GetManagedPlugins();
-            foreach (var type in plugins)
+            if (plugin != null)
             {
-                var plugin = PluginManager.Instance.Activate(type);
-                builder.ConfigureServices(plugin.ConfigureServices);
-            }
-        }
+                var context = new PluginContext();
+                var identity = await reader.GetIdentityAsync(CancellationToken.None);
+                var meta = new PluginMeta(identity.Id, fileName,
+                    Path.Combine("plugins", identity.Id));
+                context.Meta = meta;
+                if (!Directory.Exists(meta.SpaceDirectory))
+                {
+                    Directory.CreateDirectory(meta.SpaceDirectory);
 
-        /// <summary>
-        ///     初始化部分服务
-        /// </summary>
-        private static void ConfigurePlugins(IHost host)
-        {
-            host.Services.GetRequiredService<IUnitService>().SearchForUnits();
-            var service = host.Services.GetRequiredService<IBotService>();
-            var config = host.Services.GetRequiredService<IConfiguration>();
-            foreach (var type in PluginManager.Instance.GetManagedPlugins())
-            {
-                var plugin = PluginManager.Instance.Activate(type);
-                plugin.ConfigureBots(service.Builder, config);
-                plugin.OnStarted(host.Services, config);
-                _logger.LogInformation("Plugin {PluginIdentity} activated", plugin.Context.Meta.Identity);
+                    var content = (await reader.GetContentItemsAsync(CancellationToken.None))
+                        .OrderByDescending(x => x.TargetFramework.Version).FirstOrDefault();
+
+                    if (content != null)
+                    {
+                        foreach (var item in content.Items)
+                        {
+                            await using var contentStream = await reader.GetStreamAsync(item, CancellationToken.None);
+                            await using var fileStream = File.OpenWrite(Path.Combine(meta.SpaceDirectory,
+                                item.Substring(item.IndexOf('/') + 1)));
+                            await contentStream.CopyToAsync(fileStream);
+                            await fileStream.FlushAsync();
+                        }
+                    }
+                }
+                var configFile = Path.Combine(meta.SpaceDirectory, "config.toml");
+                if (File.Exists(configFile))
+                    context.Configuration =
+                        new Lazy<IConfiguration>(() => new ConfigurationBuilder().AddTomlFile(configFile).Build());
+                else context.Configuration = new Lazy<IConfiguration>(() => new ConfigurationBuilder().Build());
+
+                var dataFile = Path.Combine(meta.SpaceDirectory, "data.lite.db");
+                context.Repository = new Lazy<IRepository>(() => new LiteDbRepository(new LiteDatabase(dataFile)));
+                PluginManager.Instance.RegisterPlugin(plugin, context);
             }
         }
     }

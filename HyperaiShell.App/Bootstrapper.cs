@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using HyperaiShell.App.Services;
 using Sentry.Extensions.Logging.Extensions.DependencyInjection;
-using HyperaiShell.App.DashboardInterface;
 using HyperaiShell.App.Logging;
 using Hyperai;
 using HyperaiShell.App.Middlewares;
@@ -26,44 +25,39 @@ namespace HyperaiShell.App
 {
     public class Bootstrapper
     {
+        public IConfiguration Configuration { get; private set; }
+
+        public Bootstrapper(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
-            var config = cfgBuilder.Build();
-
             var dbName = "data/internal.litedb.db";
             var database = new LiteDatabase(dbName);
             var repository = new LiteDbRepository(database);
 
-            services.AddSingleton<IConfiguration>(config);
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IRepository>(repository);
-
+            
             services.AddLogging(builder =>
             {
                 builder
-                    .AddConfiguration(config)
+                    .AddConfiguration(Configuration)
                     .AddDebug()
-                    .AddFile("logs/app_{date}.log");
-
-                if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") builder.AddSentry();
-                
-                if (config["Application:DashboardEnabled"]?.ToUpper() == "TRUE")
-                {
-                    builder.AddDashboardLogger();
-                    builder.Services
-                    .AddDashboardServer()
-                    .AddDashboardIntegration();
-                }
-                else
-                {
-                    builder.AddConsole(c => c
+                    .AddFile("logs/app_{date}.log")
+                    .AddConsole(c => c
                         .SetMinimalLevel(LogLevel.Debug)
                         .AddBuiltinFormatters()
                         .AddFormatter<MessageElementFormatter>()
                         .AddFormatter<RelationFormatter>()
                         .AddFormatter<EventArgsFormatter>()
                     );
-                }
+                ;
+
+                if (Configuration["Application:SentryEnabled"]?.ToUpper() == "TRUE")
+                    builder.AddSentry();
             });
 
             var settings = new JsonSerializerSettings
@@ -91,7 +85,7 @@ namespace HyperaiShell.App
                     .UseUnits())
                 .AddDistributedMemoryCache()
                 .AddBots()
-                .AddClients(config)
+                .AddClients(Configuration)
                 .AddUnits()
                 .AddAttachments()
                 .AddAuthorizationService()

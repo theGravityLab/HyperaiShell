@@ -17,7 +17,7 @@ namespace HyperaiShell.App.Services
                 .GetSection("Clients")
                 .GetChildren()
                 .First(x => x["Name"] == profileName);
-            var clientType = Type.GetType(profile["ClientTypeDefined"], false);
+            var clientType = Type.GetType(profile["ClientTypeDefined"], true);
             var optionsType = Type.GetType(profile["OptionsTypeDefined"], true);
             var optionsSection = profile.GetSection("Options");
             services.AddSingleton(typeof(IApiClient), clientType!);
@@ -47,12 +47,6 @@ namespace HyperaiShell.App.Services
         public static IServiceCollection AddBlacklist(this IServiceCollection services)
         {
             services.AddSingleton<IBlockService, BlockService>();
-            return services;
-        }
-
-        public static IServiceCollection AddDashboardServer(this IServiceCollection services)
-        {
-            services.AddHostedService<DashboardServer>();
             return services;
         }
     }
