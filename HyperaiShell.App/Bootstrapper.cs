@@ -25,7 +25,7 @@ namespace HyperaiShell.App
 {
     public class Bootstrapper
     {
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
             var config = cfgBuilder.Build();
@@ -44,8 +44,8 @@ namespace HyperaiShell.App
                     .AddDebug()
                     .AddFile("logs/app_{date}.log");
 
-                if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") builder.AddSentry();
-                
+                if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") 
+                    builder.AddSentry();
                 else
                 {
                     builder.AddConsole(c => c
