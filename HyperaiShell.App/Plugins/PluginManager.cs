@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using HyperaiShell.App.Packages;
@@ -39,6 +40,16 @@ namespace HyperaiShell.App.Plugins
 
             throw new InvalidOperationException("Argument type for a plugin has not registered yet.");
         }
+
+        public void ActivateAll(Action<PluginBase> configure)
+        {
+            foreach (var type in GetManagedPlugins())
+            {
+                configure(Activate(type));
+            }
+        }
+
+        public IEnumerable<Type> GetManagedPlugins() => plugins.Keys;
 
         public IPluginContext GetContextOfPlugin(Type plugin) =>
             plugins[plugin];

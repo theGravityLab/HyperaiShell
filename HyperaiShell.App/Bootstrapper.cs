@@ -25,37 +25,39 @@ namespace HyperaiShell.App
 {
     public class Bootstrapper
     {
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-        {
-            var cfgBuilder = new ConfigurationBuilder().AddTomlFile("appsettings.toml", false);
-            var config = cfgBuilder.Build();
+        public IConfiguration Configuration { get; private set; }
 
+        public Bootstrapper(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
+        public void ConfigureServices(IServiceCollection services)
+        {
             var dbName = "data/internal.litedb.db";
             var database = new LiteDatabase(dbName);
             var repository = new LiteDbRepository(database);
 
-            services.AddSingleton<IConfiguration>(config);
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IRepository>(repository);
-
+            
             services.AddLogging(builder =>
             {
                 builder
-                    .AddConfiguration(config)
+                    .AddConfiguration(Configuration)
                     .AddDebug()
-                    .AddFile("logs/app_{date}.log");
-
-                if (config["Application:SentryEnabled"]?.ToUpper() == "TRUE") 
-                    builder.AddSentry();
-                else
-                {
-                    builder.AddConsole(c => c
+                    .AddFile("logs/app_{date}.log")
+                    .AddConsole(c => c
                         .SetMinimalLevel(LogLevel.Debug)
                         .AddBuiltinFormatters()
                         .AddFormatter<MessageElementFormatter>()
                         .AddFormatter<RelationFormatter>()
                         .AddFormatter<EventArgsFormatter>()
                     );
-                }
+                ;
+
+                if (Configuration["Application:SentryEnabled"]?.ToUpper() == "TRUE")
+                    builder.AddSentry();
             });
 
             var settings = new JsonSerializerSettings
@@ -83,7 +85,7 @@ namespace HyperaiShell.App
                     .UseUnits())
                 .AddDistributedMemoryCache()
                 .AddBots()
-                .AddClients(config)
+                .AddClients(Configuration)
                 .AddUnits()
                 .AddAttachments()
                 .AddAuthorizationService()

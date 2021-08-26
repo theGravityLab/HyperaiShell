@@ -17,7 +17,7 @@ namespace HyperaiShell.App.Services
                 .GetSection("Clients")
                 .GetChildren()
                 .First(x => x["Name"] == profileName);
-            var clientType = Type.GetType(profile["ClientTypeDefined"], false);
+            var clientType = Type.GetType(profile["ClientTypeDefined"], true);
             var optionsType = Type.GetType(profile["OptionsTypeDefined"], true);
             var optionsSection = profile.GetSection("Options");
             services.AddSingleton(typeof(IApiClient), clientType!);
