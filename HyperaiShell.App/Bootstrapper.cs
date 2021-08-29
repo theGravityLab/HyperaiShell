@@ -46,7 +46,7 @@ namespace HyperaiShell.App
                 builder
                     .AddConfiguration(Configuration)
                     .AddDebug()
-                    .AddFile("logs/app_{date}.log")
+                    .AddFile("logs/app.log")
                     .AddConsole(c => c
                         .SetMinimalLevel(LogLevel.Debug)
                         .AddBuiltinFormatters()

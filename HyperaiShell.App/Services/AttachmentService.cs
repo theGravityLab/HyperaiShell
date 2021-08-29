@@ -24,10 +24,10 @@ namespace HyperaiShell.App.Services
         public void Attach<T>(T ins, RelationModel toWhom)
         {
             var transaction = _hub.StartTransaction($"{nameof(HyperaiShell)}-{nameof(AttachmentService)}",nameof(Attach)
-                , ins.GetType().Name);
+                , typeof(T).Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
-                .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
+                .Where(x => x.TargetId == toWhom.Identity && x.TypeName == typeName).FirstOrDefault();
             if (first != null)
             {
                 first.Object = ins;
@@ -37,7 +37,7 @@ namespace HyperaiShell.App.Services
             {
                 first = new Attachment
                 {
-                    Target = toWhom.Identifier,
+                    TargetId = toWhom.Identity,
                     TypeName = typeName,
                     Object = ins
                 };
@@ -53,7 +53,7 @@ namespace HyperaiShell.App.Services
                 , typeof(T).Name);
             var typeName = typeof(T).FullName;
             var first = _repository.Query<Attachment>()
-                .Where(x => x.Target == toWhom.Identifier && x.TypeName == typeName).FirstOrDefault();
+                .Where(x => x.TargetId == toWhom.Identity && x.TypeName == typeName).FirstOrDefault();
             if (first != null) _repository.Delete<Attachment>(first.Id);
             transaction.Finish();
         }
@@ -64,7 +64,7 @@ namespace HyperaiShell.App.Services
                 nameof(Retrieve), typeof(T).Name);
             var typeName = typeof(T).FullName;
             var ins = (T) _repository.Query<Attachment>()
-                .Where(x => x.Target == fromWhom.Identifier && x.TypeName == typeName).FirstOrDefault()?.Object;
+                .Where(x => x.TargetId == fromWhom.Identity && x.TypeName == typeName).FirstOrDefault()?.Object;
             transaction.Finish();
             return ins;
         }
